@@ -1,4 +1,4 @@
-# Online learning application
+# Online teaching application
 
 This application can be used to arrange online courses. Courses contains learning material and automatically checked tasks. Every user is either teacher or student.
 
