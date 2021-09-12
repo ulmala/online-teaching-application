@@ -1,6 +1,6 @@
 # Online teaching application
 
-This application can be used to arrange online courses. Courses contains learning material and automatically checked tasks. Every user is either teacher or student.
+This application can be used to arrange online courses. Courses contains learning material and automatically checked tasks. Every user is either teacher or student. Application is used via web browser.
 
 Application features:
 * User can log in and out and create new account.
