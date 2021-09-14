@@ -1,0 +1,14 @@
+{% if session.user_id %}
+<p>You are logged in as {{ session.user_name }}</p>
+<a href="/logout">Log out</a>
+{% else %}
+<p>Log in:</p>
+<form action="/login" method="POST">
+<p>Username:<br>
+<input type="text" name="username"></p>
+<p>Password:<br>
+<input type="password" name="password"></p>
+<input type="submit" value="Log in">
+</form>
+Or create new user <a href="/register">here</a>
+{% endif %}
