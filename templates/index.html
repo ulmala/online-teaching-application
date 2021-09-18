@@ -4,6 +4,17 @@
         <p><i>This is student page.</i></p>
     {% elif session.user_role == 2 %}
         <p><i>This is teacher page.</i></p>
+        {% if courses|length %}
+            <p>Your courses:
+                {% for course in courses %}
+                    <ul>
+                        <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
+                    </ul>
+                {% endfor %}
+        {% else %}
+            <p>You don't have any active courses.</p>
+        {% endif %}
+        <a href="/create-course">Create new course</a>
     {% endif %}
     <br>
     <br>

@@ -40,3 +40,27 @@ def user_exists(username):
     if len(count) == 0:
         return False
     return True
+
+def is_teacher(user_id):
+    sql = """SELECT role FROM users
+            WHERE id = :user_id"""
+    role = db.session.execute(sql, {"user_id":user_id}).fetchone()[0]
+    if role == 2:
+        return True
+    return False
+
+def is_course_teacher(user_id, course_id):
+    print(user_id, course_id)
+    sql = """SELECT 1 FROM courses
+             WHERE teacher_id = :user_id
+             AND id = :course_id"""
+    count = db.session.execute(sql, {"user_id":user_id, "course_id":course_id}).fetchall()
+    if len(count) == 0:
+        return False
+    return True
+
+def get_teachers_courses(user_id):
+    sql = """SELECT id, name FROM courses
+             WHERE teacher_id = :user_id"""
+    courses = db.session.execute(sql, {"user_id":user_id}).fetchall()
+    return courses

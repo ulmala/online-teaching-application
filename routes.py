@@ -1,12 +1,16 @@
+import courses
 import users
 from app import app
-from flask import render_template, request, redirect, session, flash
+from flask import render_template, request, redirect, session
 
 @app.route("/")
 def index():
+    if "user_role" in session:
+        if users.is_teacher(session["user_id"]):
+            return render_template("index.html", courses=users.get_teachers_courses(session["user_id"]))
     return render_template("index.html")
 
-@app.route("/login", methods=["get", "post"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         return render_template("login.html")
@@ -49,3 +53,25 @@ def register():
         if not users.register(username, password, role):
             return render_template("error.html", message="Error when registering user")
         return redirect("/")
+
+@app.route("/create-course", methods=["GET", "POST"])
+def create_course():
+    if users.is_teacher(session["user_id"]):
+        if request.method == "GET":
+            return render_template("create-course.html")
+
+        if request.method == "POST":
+            name = request.form["course_name"]
+            description = request.form["description"]
+            teacher_id = session["user_id"]
+            courses.create_course(name, description, teacher_id)
+        
+    return redirect("/")
+
+@app.route("/course/<int:course_id>")
+def show_course(course_id):
+    print(session["user_id"], course_id)
+    if users.is_course_teacher(session["user_id"], course_id):
+        course_info = courses.get_course_info(course_id)
+        return render_template("course.html", name=course_info[0], description=course_info[1])
+    return redirect("/")
