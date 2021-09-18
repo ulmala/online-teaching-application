@@ -15,3 +15,8 @@ def get_course_info(course_id):
              WHERE id = :course_id"""
     info = db.session.execute(sql, {"course_id":course_id}).fetchone()
     return info
+
+def get_all_courses():
+    sql = """SELECT id, name FROM courses"""
+    courses = db.session.execute(sql).fetchall()
+    return courses

@@ -54,6 +54,12 @@ def register():
             return render_template("error.html", message="Error when registering user")
         return redirect("/")
 
+@app.route("/all-courses")
+def all_courses():
+    if "user_id" in session:
+        return render_template("all-courses.html", courses=courses.get_all_courses())
+    return redirect("/")
+
 @app.route("/create-course", methods=["GET", "POST"])
 def create_course():
     if users.is_teacher(session["user_id"]):
@@ -70,8 +76,7 @@ def create_course():
 
 @app.route("/course/<int:course_id>")
 def show_course(course_id):
-    print(session["user_id"], course_id)
-    if users.is_course_teacher(session["user_id"], course_id):
+    if "user_id" in session:
         course_info = courses.get_course_info(course_id)
         return render_template("course.html", name=course_info[0], description=course_info[1])
     return redirect("/")
