@@ -1,14 +1,22 @@
 {% if session.user_id %}
-<p>You are logged in as {{ session.user_name }}</p>
-<a href="/logout">Log out</a>
+    <p>You are logged in as <b>{{ session.username }}</b></p>
+    {% if session.user_role == 1 %}
+        <p><i>This is student page.</i></p>
+    {% elif session.user_role == 2 %}
+        <p><i>This is teacher page.</i></p>
+    {% endif %}
+    <br>
+    <br>
+    <br>
+    <a href="/logout">Log out</a>
 {% else %}
-<p>Log in:</p>
-<form action="/login" method="POST">
-<p>Username:<br>
-<input type="text" name="username"></p>
-<p>Password:<br>
-<input type="password" name="password"></p>
-<input type="submit" value="Log in">
-</form>
-Or create new user <a href="/register">here</a>
+    <p>Log in:</p>
+    <form action="/login" method="POST">
+    <p>Username:<br>
+    <input type="text" name="username"></p>
+    <p>Password:<br>
+    <input type="password" name="password"></p>
+    <input type="submit" value="Log in">
+    </form>
+    Or create new user <a href="/register">here</a>
 {% endif %}
