@@ -50,7 +50,6 @@ def is_teacher(user_id):
     return False
 
 def is_course_teacher(user_id, course_id):
-    print(user_id, course_id)
     sql = """SELECT 1 FROM courses
              WHERE teacher_id = :user_id
              AND id = :course_id"""
