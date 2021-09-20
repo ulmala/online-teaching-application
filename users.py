@@ -63,3 +63,12 @@ def get_teachers_courses(user_id):
              WHERE teacher_id = :user_id"""
     courses = db.session.execute(sql, {"user_id":user_id}).fetchall()
     return courses
+
+def get_students_courses(user_id):
+    sql = """SELECT C.name, C.id
+             FROM users U, courses C, course_students E
+             WHERE U.id = E.student_id
+             AND C.id = E.course_id
+             AND U.id = :user_id"""
+    courses = db.session.execute(sql, {"user_id":user_id}).fetchall()
+    return courses

@@ -8,6 +8,8 @@ def index():
     if "user_role" in session:
         if users.is_teacher(session["user_id"]):
             return render_template("index.html", courses=users.get_teachers_courses(session["user_id"]))
+        else:
+            return render_template("index.html", courses=users.get_students_courses(session["user_id"]))
     return render_template("index.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -74,9 +76,16 @@ def create_course():
         
     return redirect("/")
 
-@app.route("/course/<int:course_id>")
+@app.route("/course/<int:course_id>", methods=["GET", "POST"])
 def show_course(course_id):
     if "user_id" in session:
-        course_info = courses.get_course_info(course_id)
-        return render_template("course.html", name=course_info[0], description=course_info[1])
+
+        if request.method == "GET": 
+            course_info = courses.get_course_info(course_id)
+            return render_template("course.html", name=course_info[0], description=course_info[1],
+                                    id=course_id)
+        if request.method == "POST":
+            if not courses.add_student(course_id, session["user_id"]):
+                return render_template("error.html", message="You are already enrolled!")
+
     return redirect("/")

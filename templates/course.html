@@ -1,3 +1,9 @@
 <h1>{{name}}</h1>
 <p><u>Course description:</u></p>
 <p>{{description}}</p>
+
+{% if session.user_role == 1 %}
+    <form action="/course/{{ id }}" method="POST">
+    <input type="submit" value="JOIN">
+    </form>
+{% endif %}

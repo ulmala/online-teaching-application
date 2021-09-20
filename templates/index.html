@@ -1,7 +1,19 @@
 {% if session.user_id %}
     <p>You are logged in as <b>{{ session.username }}</b></p>
+
     {% if session.user_role == 1 %}
         <p><i>This is student page.</i></p>
+        {% if courses|length %}
+            <p>You are enrolled to following courses:
+                {% for course in courses %}
+                    <ul>
+                        <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
+                    </ul>
+                {% endfor %}
+        {% else %}
+            <p>You are not enrolled to any courses.</p>
+        {% endif %}
+
     {% elif session.user_role == 2 %}
         <p><i>This is teacher page.</i></p>
         {% if courses|length %}
@@ -16,6 +28,7 @@
         {% endif %}
         <a href="/create-course">Create new course</a>
     {% endif %}
+    
     <br>
     <br>
     <br>

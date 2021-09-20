@@ -11,3 +11,9 @@ CREATE TABLE IF NOT EXISTS courses(
     name TEXT,
     description TEXT
 );
+
+CREATE TABLE IF NOT EXISTS course_students(
+    course_id INT REFERENCES courses,
+    student_id INT REFERENCES users,
+    UNIQUE (course_id, student_id)
+);
