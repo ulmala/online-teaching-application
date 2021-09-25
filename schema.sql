@@ -17,3 +17,16 @@ CREATE TABLE IF NOT EXISTS course_students(
     student_id INT REFERENCES users,
     UNIQUE (course_id, student_id)
 );
+
+CREATE TABLE IF NOT EXISTS tasks(
+    id SERIAL PRIMARY KEY,
+    course_id INT REFERENCES courses,
+    question TEXT
+);
+
+CREATE TABLE IF NOT EXISTS answers(
+    id SERIAL PRIMARY KEY,
+    task_id INT REFERENCES tasks,
+    answer TEXT,
+    correct BOOLEAN
+);

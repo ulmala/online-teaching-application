@@ -68,11 +68,13 @@ def create_course():
         if request.method == "GET":
             return render_template("create-course.html")
 
-        if request.method == "POST":
+        if request.method == "POST":            
             name = request.form["course_name"]
             description = request.form["description"]
             teacher_id = session["user_id"]
-            courses.create_course(name, description, teacher_id)
+            course_id = courses.create_course(name, description, teacher_id)
+
+            return redirect("/course/" + str(course_id))
         
     return redirect("/")
 
@@ -89,3 +91,17 @@ def show_course(course_id):
                 return render_template("error.html", message="You are already enrolled!")
 
     return redirect("/")
+
+@app.route("/add-task/<int:course_id>", methods=["GET", "POST"])
+def add_task(course_id):
+    users.require_role(2)
+    if request.method == "GET":
+        return render_template("add-task.html", course_id=course_id)
+
+    if request.method == "POST":
+        question = request.form["question"]
+        answer = request.form["answer"]
+        correct = True #request.form.getlist("correct")
+        courses.add_task(question, answer, correct, course_id)
+
+    return redirect("/course/" + str(course_id))

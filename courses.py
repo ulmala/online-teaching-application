@@ -3,12 +3,12 @@ from db import db
 def create_course(name, description, teacher_id):
     try:
         sql = """INSERT INTO courses (name, description, teacher_id)
-                 VALUES (:name, :description, :teacher_id)"""
-        db.session.execute(sql, {"name":name, "description":description, "teacher_id":teacher_id})
+                 VALUES (:name, :description, :teacher_id) RETURNING id"""         
+        course_id = db.session.execute(sql, {"name":name, "description":description, "teacher_id":teacher_id}).fetchone()[0]
         db.session.commit()
     except:
         return False
-    return True
+    return course_id
 
 def get_course_info(course_id):
     sql = """SELECT name, description FROM courses
@@ -30,3 +30,15 @@ def add_student(course_id, student_id):
     except:
         return False
     return True
+
+def add_task(question, answer, correct, course_id):
+    sql = """INSERT INTO tasks (course_id, question)
+             VALUES (:course_id, :question)
+             RETURNING id"""
+
+    task_id = db.session.execute(sql, {"course_id":course_id, "question":question}).fetchone()[0]
+    
+    sql = """INSERT INTO answers (task_id, answer, correct)
+             VALUES (:task_id, :answer, :correct)"""
+    db.session.execute(sql, {"task_id":task_id, "answer":answer, "correct":correct})
+    db.session.commit()
