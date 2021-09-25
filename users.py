@@ -85,3 +85,18 @@ def is_enrolled(user_id, course_id):
         return True
     return False
     
+def already_correct_answer(user_id, task_id):
+    sql = """SELECT 1 FROM results
+             WHERE user_id = :user_id
+             AND task_id = :task_id
+             AND result = 1"""
+    rows = db.session.execute(sql, {"user_id":user_id, "task_id":task_id}).fetchall()
+    if len(rows) == 0:
+        return False
+    return True
+
+def add_solved_task(user_id, task_id):
+    sql = """INSERT INTO results (user_id, task_id, result)
+            VALUES (:user_id, :task_id, :result)"""
+    db.session.execute(sql, {"user_id":user_id, "task_id":task_id, "result":1})
+    db.session.commit()

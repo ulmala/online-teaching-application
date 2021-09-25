@@ -130,8 +130,11 @@ def solve(course_id):
         return render_template("error.html", message="You need to enroll first!")
     task = courses.get_random_task(course_id)
     if request.method == "GET":
-        return render_template("solve.html", question=task[0], course_id=course_id)
+        return render_template("solve.html", question=task["question"], course_id=course_id)
     if request.method == "POST":
         user_answer = request.form["answer"]
-        correct = user_answer == task[1]
+        correct = user_answer == task["answer"]
+        if correct:
+            if not users.already_correct_answer(session["user_id"], task["id"]):
+                users.add_solved_task(session["user_id"], task["id"])
         return render_template("result.html", correct=correct, course_id=course_id)

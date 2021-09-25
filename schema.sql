@@ -31,3 +31,11 @@ CREATE TABLE IF NOT EXISTS answers(
     answer TEXT,
     correct BOOLEAN
 );
+
+CREATE TABLE IF NOT EXISTS results(
+    id SERIAL PRIMARY KEY,
+    task_id INT REFERENCES tasks,
+    user_id INT REFERENCES users,
+    result INT,
+    UNIQUE (task_id, user_id)
+);

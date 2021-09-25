@@ -51,11 +51,11 @@ def remove_course(course_id):
     db.session.commit()
 
 def get_random_task(course_id):
-    sql = """SELECT T.question, A.answer, A.correct
+    sql = """SELECT T.id, T.question, A.answer, A.correct
              FROM tasks T, answers A
              WHERE T.course_id = :course_id
              AND T.id = A.task_id
              ORDER BY RANDOM()
              LIMIT 1"""
     task = db.session.execute(sql, {"course_id":course_id}).fetchone()
-    return task
+    return dict(zip(task.keys(), task))
