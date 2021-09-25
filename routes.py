@@ -117,9 +117,21 @@ def remove_course(course_id):
     if request.method == "GET":
         return render_template("remove.html", name=course_info[0], course_id=course_id)
     if request.method == "POST":
-        print(request.form["choice"])
         if request.form["choice"] == "yes":
             courses.remove_course(course_id)
             return redirect("/")
         if request.form["choice"] == "no":
             return redirect("/course/" + str(course_id))
+
+@app.route("/solve/<int:course_id>", methods=["GET", "POST"])
+def solve(course_id):
+    users.require_role(1)
+    if not users.is_enrolled(session["user_id"], course_id):
+        return render_template("error.html", message="You need to enroll first!")
+    task = courses.get_random_task(course_id)
+    if request.method == "GET":
+        return render_template("solve.html", question=task[0], course_id=course_id)
+    if request.method == "POST":
+        user_answer = request.form["answer"]
+        correct = user_answer == task[1]
+        return render_template("result.html", correct=correct, course_id=course_id)

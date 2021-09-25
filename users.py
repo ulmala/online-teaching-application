@@ -77,3 +77,11 @@ def get_students_courses(user_id):
 def require_role(role):
     if role > session.get("user_role", 0):
         abort(403)
+
+def is_enrolled(user_id, course_id):
+    courses = get_students_courses(user_id)
+    course_ids = [course[1] for course in courses]
+    if course_id in course_ids:
+        return True
+    return False
+    
