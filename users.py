@@ -1,6 +1,6 @@
 import secrets
 from db import db
-from flask import session
+from flask import session, abort
 from werkzeug.security import check_password_hash, generate_password_hash
 
 def login(username, password):
@@ -72,3 +72,7 @@ def get_students_courses(user_id):
              AND U.id = :user_id"""
     courses = db.session.execute(sql, {"user_id":user_id}).fetchall()
     return courses
+
+def require_role(role):
+    if role > session.get("user_role", 0):
+        abort(403)
