@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS courses(
     id SERIAL PRIMARY KEY,
     teacher_id INTEGER REFERENCES users,
     name TEXT,
-    description TEXT
+    description TEXT,
+    visible BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS course_students(

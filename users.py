@@ -55,22 +55,23 @@ def is_course_teacher(user_id, course_id):
              AND id = :course_id"""
     count = db.session.execute(sql, {"user_id":user_id, "course_id":course_id}).fetchall()
     if len(count) == 0:
-        return False
-    return True
+        abort(403)
 
 def get_teachers_courses(user_id):
     sql = """SELECT id, name FROM courses
-             WHERE teacher_id = :user_id"""
-    courses = db.session.execute(sql, {"user_id":user_id}).fetchall()
+             WHERE teacher_id = :user_id
+             and visible = :visible"""
+    courses = db.session.execute(sql, {"user_id":user_id, "visible":True}).fetchall()
     return courses
 
 def get_students_courses(user_id):
-    sql = """SELECT C.name, C.id
+    sql = """SELECT C.name, C.id, C.visible
              FROM users U, courses C, course_students E
              WHERE U.id = E.student_id
              AND C.id = E.course_id
-             AND U.id = :user_id"""
-    courses = db.session.execute(sql, {"user_id":user_id}).fetchall()
+             AND U.id = :user_id
+             AND C.visible = :visible"""
+    courses = db.session.execute(sql, {"user_id":user_id, "visible":True}).fetchall()
     return courses
 
 def require_role(role):

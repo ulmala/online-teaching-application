@@ -1,0 +1,6 @@
+<p>Are you sure you want to remove course <b>{{ name }}?</b></p>
+<form action="/remove/{{ course_id }}" method="POST">
+<p>Yes<input type="radio" name="choice" value="yes">
+<p>No<input type="radio" name="choice" value="no">
+<p><input type="submit" value="OK">
+</form>

@@ -1,3 +1,5 @@
+from os import remove
+import re
 import courses
 import users
 from app import app
@@ -105,3 +107,19 @@ def add_task(course_id):
         courses.add_task(question, answer, correct, course_id)
 
     return redirect("/course/" + str(course_id))
+
+@app.route("/remove/<int:course_id>", methods=["GET", "POST"])
+def remove_course(course_id):
+    users.require_role(2)
+    users.is_course_teacher(session["user_id"], course_id)
+    
+    course_info = courses.get_course_info(course_id)
+    if request.method == "GET":
+        return render_template("remove.html", name=course_info[0], course_id=course_id)
+    if request.method == "POST":
+        print(request.form["choice"])
+        if request.form["choice"] == "yes":
+            courses.remove_course(course_id)
+            return redirect("/")
+        if request.form["choice"] == "no":
+            return redirect("/course/" + str(course_id))

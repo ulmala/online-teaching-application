@@ -2,9 +2,10 @@ from db import db
 
 def create_course(name, description, teacher_id):
     try:
-        sql = """INSERT INTO courses (name, description, teacher_id)
-                 VALUES (:name, :description, :teacher_id) RETURNING id"""         
-        course_id = db.session.execute(sql, {"name":name, "description":description, "teacher_id":teacher_id}).fetchone()[0]
+        sql = """INSERT INTO courses (name, description, teacher_id, visible)
+                 VALUES (:name, :description, :teacher_id, :visible) RETURNING id"""         
+        course_id = db.session.execute(sql, {"name":name, "description":description,
+                                             "teacher_id":teacher_id, "visible":True}).fetchone()[0]
         db.session.commit()
     except:
         return False
@@ -17,8 +18,9 @@ def get_course_info(course_id):
     return info
 
 def get_all_courses():
-    sql = """SELECT id, name FROM courses"""
-    courses = db.session.execute(sql).fetchall()
+    sql = """SELECT id, name FROM courses
+             WHERE visible = :visible"""
+    courses = db.session.execute(sql, {"visible":True}).fetchall()
     return courses
 
 def add_student(course_id, student_id):
@@ -41,4 +43,9 @@ def add_task(question, answer, correct, course_id):
     sql = """INSERT INTO answers (task_id, answer, correct)
              VALUES (:task_id, :answer, :correct)"""
     db.session.execute(sql, {"task_id":task_id, "answer":answer, "correct":correct})
+    db.session.commit()
+
+def remove_course(course_id):
+    sql = "UPDATE courses SET visible=:visible WHERE id=:id"
+    db.session.execute(sql, {"id":course_id, "visible":False})
     db.session.commit()
