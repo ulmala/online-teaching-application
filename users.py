@@ -100,3 +100,18 @@ def add_solved_task(user_id, task_id):
             VALUES (:user_id, :task_id, :result)"""
     db.session.execute(sql, {"user_id":user_id, "task_id":task_id, "result":1})
     db.session.commit()
+
+def solved_tasks(user_id, course_id):
+    sql = """SELECT COUNT(*) FROM tasks
+             WHERE course_id=:course_id"""
+    count = db.session.execute(sql, {"course_id":course_id}).fetchone()[0]
+
+    sql = """SELECT COUNT(*) FROM tasks
+             JOIN results ON tasks.id = results.task_id
+             WHERE course_id=:course_id
+             AND user_id=:user_id
+             AND result=1"""
+    solved = db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchone()[0]
+    if count > 0:
+        return round((solved/count)*100,2)
+    return 0.0

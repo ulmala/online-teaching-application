@@ -86,8 +86,9 @@ def show_course(course_id):
 
         if request.method == "GET": 
             course_info = courses.get_course_info(course_id)
-            return render_template("course.html", name=course_info[0], description=course_info[1],
-                                    id=course_id)
+            solved_tasks = users.solved_tasks(session["user_id"], course_id)
+            return render_template("course.html", name=course_info["name"], description=course_info["description"],
+                                    task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks)
         if request.method == "POST":
             if not courses.add_student(course_id, session["user_id"]):
                 return render_template("error.html", message="You are already enrolled!")

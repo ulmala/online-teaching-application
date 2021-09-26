@@ -1,12 +1,14 @@
 <h1>{{ name }}</h1>
-<p><u>Course description:</u></p>
-<p>{{ description }}</p>
-
+<p><i>{{ description }}</i></p>
 {% if session.user_role == 1 %}
-    <form action="/course/{{ id }}" method="POST">
-    <input type="submit" value="JOIN">
-    </form>
+    <p>This course has {{ task_count }} tasks</p>
+    {% if task_count > 0 %}
+        <p>You have solved {{ solved_tasks }}% of them</p>
+    {% endif %}
     <p><a href="/solve/{{ id }}">Solve tasks!</a>
+    <form action="/course/{{ id }}" method="POST">
+    <input type="submit" value="Enroll">
+    </form>
 {% elif session.user_role == 2 %}
     <a href="/add-task/{{ id }}">Add task</a>
     <p><a href="/remove/{{ id }}">Remove this course</a>

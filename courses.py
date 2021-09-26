@@ -12,14 +12,17 @@ def create_course(name, description, teacher_id):
     return course_id
 
 def get_course_info(course_id):
-    sql = """SELECT name, description FROM courses
-             WHERE id = :course_id"""
+    sql = """SELECT courses.name, courses.description, COUNT(tasks.id) as task_count
+             FROM courses LEFT JOIN tasks ON courses.id = tasks.course_id
+             WHERE courses.id=:course_id
+             GROUP BY courses.id"""
     info = db.session.execute(sql, {"course_id":course_id}).fetchone()
-    return info
+    print(info)
+    return dict(zip(info.keys(), info))
 
 def get_all_courses():
     sql = """SELECT id, name FROM courses
-             WHERE visible = :visible"""
+             WHERE visible=:visible"""
     courses = db.session.execute(sql, {"visible":True}).fetchall()
     return courses
 
@@ -53,9 +56,18 @@ def remove_course(course_id):
 def get_random_task(course_id):
     sql = """SELECT T.id, T.question, A.answer, A.correct
              FROM tasks T, answers A
-             WHERE T.course_id = :course_id
-             AND T.id = A.task_id
+             WHERE T.course_id=:course_id
+             AND T.id=A.task_id
              ORDER BY RANDOM()
              LIMIT 1"""
     task = db.session.execute(sql, {"course_id":course_id}).fetchone()
     return dict(zip(task.keys(), task))
+
+def get_task_count(course_id):
+
+    # LOITSU MITEN SAA TÄMÄN KURSSIN TIETOJEN KANSSA SAMAAN LOITSUUN!
+
+    sql = """SELECT COUNT(*) FROM tasks
+             WHERE course_id=:course_id"""
+    count = db.session.execute(sql, {"course_id":course_id}).fetchone()[0]
+    return count
