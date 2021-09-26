@@ -1,7 +1,7 @@
 <h1>{{ name }}</h1>
 <p><i>{{ description }}</i></p>
+<p>This course has {{ task_count }} tasks</p>
 {% if session.user_role == 1 %}
-    <p>This course has {{ task_count }} tasks</p>
     {% if task_count > 0 %}
         <p>You have solved {{ solved_tasks }}% of them</p>
     {% endif %}
