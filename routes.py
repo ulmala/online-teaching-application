@@ -116,7 +116,7 @@ def remove_course(course_id):
     
     course_info = courses.get_course_info(course_id)
     if request.method == "GET":
-        return render_template("remove.html", name=course_info[0], course_id=course_id)
+        return render_template("remove.html", name=course_info["name"], course_id=course_id)
     if request.method == "POST":
         if request.form["choice"] == "yes":
             courses.remove_course(course_id)
