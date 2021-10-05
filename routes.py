@@ -86,11 +86,11 @@ def show_course(course_id):
         courses.course_is_valid(course_id)
         if request.method == "GET": 
             course_info = courses.get_course_info(course_id)
-            solved_tasks = users.solved_tasks(session["user_id"], course_id)
+            solved_tasks = users.share_of_solved_tasks(session["user_id"], course_id)
             students = courses.get_course_students(course_id)
             return render_template("course.html", name=course_info["name"], description=course_info["description"],
                                     task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks,
-                                    students=students)
+                                    students=students, course_id=course_id)
         if request.method == "POST":
             if not courses.add_student(course_id, session["user_id"]):
                 return render_template("error.html", message="You are already enrolled!")
@@ -142,3 +142,13 @@ def solve(course_id):
             if not users.already_correct_answer(session["user_id"], task["id"]):
                 users.add_solved_task(session["user_id"], task["id"])
         return render_template("result.html", correct=correct, course_id=course_id)
+
+@app.route("/course/<int:course_id>/student-stats/<int:student_id>", methods=["GET"])
+def student_stats(student_id, course_id):
+    users.require_role(2)
+    users.is_course_teacher(session["user_id"], course_id)
+    name = users.get_username(student_id)
+    share_of_solved_tasks = users.share_of_solved_tasks(student_id, course_id)
+    solved_tasks = users.get_list_of_solved_tasks(student_id, course_id)
+    return render_template("student-stats.html", name=name, share_of_solved_tasks=share_of_solved_tasks,
+                            solved_tasks=solved_tasks)

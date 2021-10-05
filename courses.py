@@ -73,12 +73,12 @@ def get_task_count(course_id):
     return count
 
 def get_course_students(course_id):
-    sql = """SELECT username
+    sql = """SELECT username, student_id
              FROM course_students
              JOIN users ON course_students.student_id=users.id
              WHERE course_id=:course_id"""
-    student_names = db.session.execute(sql, {"course_id":course_id}).fetchall()
-    return [name[0] for name in student_names]
+    students = db.session.execute(sql, {"course_id":course_id}).fetchall()
+    return students
 
 def course_is_valid(course_id):
     sql = """SELECT visible

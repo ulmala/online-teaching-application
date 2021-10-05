@@ -101,7 +101,7 @@ def add_solved_task(user_id, task_id):
     db.session.execute(sql, {"user_id":user_id, "task_id":task_id, "result":1})
     db.session.commit()
 
-def solved_tasks(user_id, course_id):
+def share_of_solved_tasks(user_id, course_id):
     sql = """SELECT COUNT(*) FROM tasks
              WHERE course_id=:course_id"""
     count = db.session.execute(sql, {"course_id":course_id}).fetchone()[0]
@@ -115,3 +115,19 @@ def solved_tasks(user_id, course_id):
     if count > 0:
         return round((solved/count)*100,2)
     return 0.0
+
+def get_username(user_id):
+    sql = """SELECT username
+             FROM users
+             WHERE id=:user_id"""
+    name = db.session.execute(sql, {"user_id":user_id}).fetchone()[0]
+    return name
+
+def get_list_of_solved_tasks(user_id, course_id):
+    sql = """SELECT question FROM tasks
+             JOIN results ON tasks.id=results.task_id
+             WHERE course_id=:course_id
+             AND user_id=:user_id
+             and result=1"""
+    solved = db.session.execute(sql, {"user_id":user_id, "course_id":course_id}).fetchall()
+    return solved
