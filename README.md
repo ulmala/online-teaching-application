@@ -21,7 +21,7 @@ Application features:
     - [x] add open tasks for course
     - [ ] add multiple choice tasks for course
     - [x] view enrolled students
-    - [ ] view statistics which tasks they had solved
+    - [x] view statistics which tasks they had solved
 
 Application can be found [here](https://onlinte-teaching-application.herokuapp.com/)  
 
