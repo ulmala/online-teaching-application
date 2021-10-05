@@ -87,8 +87,10 @@ def show_course(course_id):
         if request.method == "GET": 
             course_info = courses.get_course_info(course_id)
             solved_tasks = users.solved_tasks(session["user_id"], course_id)
+            students = courses.get_course_students(course_id)
             return render_template("course.html", name=course_info["name"], description=course_info["description"],
-                                    task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks)
+                                    task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks,
+                                    students=students)
         if request.method == "POST":
             if not courses.add_student(course_id, session["user_id"]):
                 return render_template("error.html", message="You are already enrolled!")
@@ -98,6 +100,7 @@ def show_course(course_id):
 @app.route("/add-task/<int:course_id>", methods=["GET", "POST"])
 def add_task(course_id):
     users.require_role(2)
+    users.is_course_teacher(session["user_id"], course_id)
     if request.method == "GET":
         return render_template("add-task.html", course_id=course_id)
 

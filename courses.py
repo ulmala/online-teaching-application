@@ -17,7 +17,6 @@ def get_course_info(course_id):
              WHERE courses.id=:course_id
              GROUP BY courses.id"""
     info = db.session.execute(sql, {"course_id":course_id}).fetchone()
-    print(info)
     return dict(zip(info.keys(), info))
 
 def get_all_courses():
@@ -71,3 +70,11 @@ def get_task_count(course_id):
              WHERE course_id=:course_id"""
     count = db.session.execute(sql, {"course_id":course_id}).fetchone()[0]
     return count
+
+def get_course_students(course_id):
+    sql = """SELECT username
+             FROM course_students
+             JOIN users ON course_students.student_id=users.id
+             WHERE course_id=:course_id"""
+    student_names = db.session.execute(sql, {"course_id":course_id}).fetchall()
+    return [name[0] for name in student_names]
