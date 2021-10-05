@@ -83,7 +83,7 @@ def create_course():
 @app.route("/course/<int:course_id>", methods=["GET", "POST"])
 def show_course(course_id):
     if "user_id" in session:
-
+        courses.course_is_valid(course_id)
         if request.method == "GET": 
             course_info = courses.get_course_info(course_id)
             solved_tasks = users.solved_tasks(session["user_id"], course_id)

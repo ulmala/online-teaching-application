@@ -1,4 +1,5 @@
 from db import db
+from flask import session, abort
 
 def create_course(name, description, teacher_id):
     try:
@@ -78,3 +79,11 @@ def get_course_students(course_id):
              WHERE course_id=:course_id"""
     student_names = db.session.execute(sql, {"course_id":course_id}).fetchall()
     return [name[0] for name in student_names]
+
+def course_is_valid(course_id):
+    sql = """SELECT visible
+             FROM courses
+             WHERE id=:course_id"""
+    visible = db.session.execute(sql, {"course_id":course_id}).fetchone()[0]
+    if not visible:
+        abort(403)
