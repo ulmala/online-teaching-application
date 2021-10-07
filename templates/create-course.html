@@ -1,8 +1,19 @@
-<h2>Create new course</h2>
-<form action="/create-course" method="POST" enctype="multipart/form-data">
-Course name:
-<p><input type="text" name="course_name" contenteditable>
-<p>Course description:
-<p><textarea name="description" rows="3" cols="40" maxlength="1000"></textarea>
-<p><input type="submit" value="Create">
-</form>
+<!doctype html>
+<html>
+    <head>
+        <title>Create course</title>
+    </head>
+    <body>
+        <h1>Create new course</h1>
+        <form action="/create-course" method="POST" enctype="multipart/form-data">
+            <label for="course_name">Course name:</label><br>
+            <input type="text" name="course_name"><br>
+            <label for="description">Course description:</label><br>
+            <textarea name="description" rows="3" cols="40" maxlength="1000"></textarea><br>
+            <label for="file">Add material:</label><br>
+            <input type="file" name="file" multiple accept=".txt"><br>
+            <br><br>
+            <input type="submit" value="Create">
+        </form>
+    </body>
+</html>

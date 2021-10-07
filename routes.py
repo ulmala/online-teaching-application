@@ -4,7 +4,7 @@ import re
 import courses
 import users
 from app import app
-from flask import render_template, request, redirect, session
+from flask import render_template, request, redirect, session, Response
 
 @app.route("/")
 def index():
@@ -75,8 +75,11 @@ def create_course():
             name = request.form["course_name"]
             description = request.form["description"]
             teacher_id = session["user_id"]
+            file = request.files['file']
+            file_name = file.filename
+            file_data = file.read()
             course_id = courses.create_course(name, description, teacher_id)
-
+            courses.upload_material(course_id, file_name, file_data)
             return redirect("/course/" + str(course_id))
         
     return redirect("/")
@@ -89,9 +92,10 @@ def show_course(course_id):
             course_info = courses.get_course_info(course_id)
             solved_tasks = users.share_of_solved_tasks(session["user_id"], course_id)
             students = courses.get_course_students(course_id)
+            materials = courses.get_course_materials(course_id)
             return render_template("course.html", name=course_info["name"], description=course_info["description"],
                                     task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks,
-                                    students=students, course_id=course_id)
+                                    students=students, course_id=course_id, materials=materials)
         if request.method == "POST":
             if not courses.add_student(course_id, session["user_id"]):
                 return render_template("error.html", message="You are already enrolled!")
@@ -166,3 +170,14 @@ def update_course(course_id):
         description = request.form["description"]
         courses.update_course_info(course_id, name, description)
         return redirect("/course/" + str(course_id))
+
+@app.route("/download/<int:material_id>", methods=["GET"])
+def download(material_id):
+    file = courses.get_material(material_id)
+    name = file[0]
+    data = file[1]
+    return Response(
+        data,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 f"attachment; filename={name}"})

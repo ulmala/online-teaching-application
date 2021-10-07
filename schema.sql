@@ -39,3 +39,10 @@ CREATE TABLE IF NOT EXISTS results(
     result INT,
     UNIQUE (task_id, user_id)
 );
+
+CREATE TABLE IF NOT EXISTS materials(
+    id SERIAL PRIMARY KEY,
+    course_id INT REFERENCES courses,
+    name TEXT,
+    data bytea
+);
