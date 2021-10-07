@@ -87,3 +87,10 @@ def course_is_valid(course_id):
     visible = db.session.execute(sql, {"course_id":course_id}).fetchone()[0]
     if not visible:
         abort(403)
+
+def update_course_info(course_id, name, description):
+    sql = """UPDATE courses
+             SET name=:name, description=:description
+             WHERE id=:course_id"""
+    db.session.execute(sql, {"name":name, "description":description, "course_id":course_id})
+    db.session.commit()

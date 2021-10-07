@@ -1,3 +1,4 @@
+from operator import methodcaller
 from os import remove
 import re
 import courses
@@ -152,3 +153,16 @@ def student_stats(student_id, course_id):
     solved_tasks = users.get_list_of_solved_tasks(student_id, course_id)
     return render_template("student-stats.html", name=name, share_of_solved_tasks=share_of_solved_tasks,
                             solved_tasks=solved_tasks)
+
+@app.route("/update-course/<int:course_id>", methods=["GET", "POST"])
+def update_course(course_id):
+    users.require_role(2)
+    if request.method == "GET":
+        course_info = courses.get_course_info(course_id)
+        return render_template("update-course.html", course_id=course_id, name=course_info["name"], 
+                                description=course_info["description"])
+    if request.method == "POST":
+        name = request.form["name"]
+        description = request.form["description"]
+        courses.update_course_info(course_id, name, description)
+        return redirect("/course/" + str(course_id))

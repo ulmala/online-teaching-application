@@ -12,6 +12,7 @@
 {% elif session.user_role == 2 %}
     <a href="/add-task/{{ id }}">Add task</a>
     <p><a href="/remove/{{ id }}">Remove this course</a>
+    <p><a href="/update-course/{{ id }}">Update this course</a>
     {% if students %}
         <p>Enrolled students:</p>
         {% for student in students %}

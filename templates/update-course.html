@@ -1,0 +1,7 @@
+<form action="/update-course/{{ course_id }}" method="POST">
+Change course name:
+<p><input type="text" name="name" value={{name}}>
+<p>Course description:
+<p><textarea name="description" rows="3" cols="40" maxlength="1000">{{description}}</textarea>
+<p><input type="submit" value="Update">
+</form>
