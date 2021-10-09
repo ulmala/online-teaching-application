@@ -93,10 +93,10 @@ def show_course(course_id):
             course_info = courses.get_course_info(course_id)
             solved_tasks = users.share_of_solved_tasks(session["user_id"], course_id)
             students = courses.get_course_students(course_id)
-            materials = materials.get_course_materials(course_id)
+            course_materials = materials.get_course_materials(course_id)
             return render_template("course.html", name=course_info["name"], description=course_info["description"],
                                     task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks,
-                                    students=students, course_id=course_id, materials=materials)
+                                    students=students, course_id=course_id, materials=course_materials)
         if request.method == "POST":
             if not courses.add_student(course_id, session["user_id"]):
                 return render_template("error.html", message="You are already enrolled!")
@@ -164,9 +164,9 @@ def update_course(course_id):
     users.require_role(2)
     if request.method == "GET":
         course_info = courses.get_course_info(course_id)
-        materials = materials.get_course_materials(course_id)
+        course_materials = materials.get_course_materials(course_id)
         return render_template("update-course.html", course_id=course_id, name=course_info["name"], 
-                                description=course_info["description"], materials=materials)
+                                description=course_info["description"], materials=course_materials)
     if request.method == "POST":
         name = request.form["name"]
         description = request.form["description"]
