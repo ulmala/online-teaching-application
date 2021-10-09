@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Remove material</title>
+    </head>
+    <body>
+        <h3>Are you sure you want to remove material <i>{{ material_info[1] }}</i>?</h3>
+        <form action="/remove-material/{{ material_info[0] }}" method="POST">
+            <label for="choice">Yes</label>
+            <input type="radio" name="choice" value="yes"><br>
+            <label for="choice">No</label>
+            <input type="radio" name="choice" value="no"><br>
+            <input type="submit" value="OK">
+        </form>
+    </body>
+</html>

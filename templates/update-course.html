@@ -1,7 +1,27 @@
-<form action="/update-course/{{ course_id }}" method="POST">
-Change course name:
-<p><input type="text" name="name" value={{name}}>
-<p>Course description:
-<p><textarea name="description" rows="3" cols="40" maxlength="1000">{{description}}</textarea>
-<p><input type="submit" value="Update">
-</form>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Update course</title>
+    </head>
+    <body>
+        <h1>Modify course {{ name }}</h1>
+        <form action="/update-course/{{ course_id }}" method="POST" enctype="multipart/form-data">
+            <label for="name">Course name:</label><br>
+            <input type="text" name="name" value={{name}}><br>
+            <label for="description">Course description:</label><br>
+            <textarea name="description" rows="3" cols="40" maxlength="1000">{{ description }}</textarea><br>
+
+            <p>Remove material by clicking it:</p>
+            {% for material in materials %}
+            <ul>
+                <li><a href="/remove-material/{{ material[0] }}">{{ material[1] }}</a>
+            </ul>
+            {% endfor %}
+
+            <label for="file">Add new material:</label><br>
+            <input type="file" name="file" multiple accept=".txt"><br><br>
+        
+            <input type="submit" value="Update">
+        </form>
+    </body>
+</html>

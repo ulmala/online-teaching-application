@@ -163,11 +163,18 @@ def update_course(course_id):
     users.require_role(2)
     if request.method == "GET":
         course_info = courses.get_course_info(course_id)
+        materials = courses.get_course_materials(course_id)
         return render_template("update-course.html", course_id=course_id, name=course_info["name"], 
-                                description=course_info["description"])
+                                description=course_info["description"], materials=materials)
     if request.method == "POST":
         name = request.form["name"]
         description = request.form["description"]
+
+        file = request.files['file']
+        file_name = file.filename
+        file_data = file.read()
+        courses.upload_material(course_id, file_name, file_data)
+
         courses.update_course_info(course_id, name, description)
         return redirect("/course/" + str(course_id))
 
@@ -181,3 +188,16 @@ def download(material_id):
         mimetype="text/csv",
         headers={"Content-disposition":
                  f"attachment; filename={name}"})
+
+@app.route("/remove-material/<int:material_id>", methods=["GET", "POST"])
+def remove_material(material_id):
+    users.require_role(2)
+    material_info = courses.get_material_info(material_id)
+    if request.method == "GET":
+        return render_template("remove-material.html", material_info=material_info)
+    if request.method == "POST":
+        if request.form["choice"] == "yes":
+            courses.remove_material(material_id)
+            return redirect("/")
+        if request.form["choice"] == "no":
+            return redirect("/course/" + str(material_id))
