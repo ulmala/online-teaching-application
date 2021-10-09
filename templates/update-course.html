@@ -4,7 +4,7 @@
         <title>Update course</title>
     </head>
     <body>
-        <h1>Modify course {{ name }}</h1>
+        <h1>Modify course <i>{{ name }}</i></h1>
         <form action="/update-course/{{ course_id }}" method="POST" enctype="multipart/form-data">
             <label for="name">Course name:</label><br>
             <input type="text" name="name" value={{name}}><br>
