@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS course_students(
 CREATE TABLE IF NOT EXISTS tasks(
     id SERIAL PRIMARY KEY,
     course_id INT REFERENCES courses,
-    question TEXT
+    question TEXT,
+    visible BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS answers(

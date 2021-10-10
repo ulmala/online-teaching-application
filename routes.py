@@ -94,6 +94,7 @@ def show_course(course_id):
             solved_tasks = users.share_of_solved_tasks(session["user_id"], course_id)
             students = courses.get_course_students(course_id)
             course_materials = materials.get_course_materials(course_id)
+            print(course_materials)
             return render_template("course.html", name=course_info["name"], description=course_info["description"],
                                     task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks,
                                     students=students, course_id=course_id, materials=course_materials)
@@ -117,6 +118,19 @@ def add_task(course_id):
         courses.add_task(question, answer, correct, course_id)
 
     return redirect("/course/" + str(course_id))
+
+@app.route("/remove-task/<int:task_id>", methods=["GET", "POST"])
+def remove_task(task_id):
+    users.require_role(2)
+    task_info = courses.get_task(task_id)
+    if request.method == "GET":
+        return render_template("remove-task.html", task_info=task_info)
+    if request.method == "POST":
+        if request.form["choice"] == "yes":
+            courses.remove_task(task_id)
+            return redirect("/")
+        if request.form["choice"] == "no":
+            return redirect("/update-course/" + str(task_info[2]))
 
 @app.route("/remove/<int:course_id>", methods=["GET", "POST"])
 def remove_course(course_id):
@@ -165,8 +179,10 @@ def update_course(course_id):
     if request.method == "GET":
         course_info = courses.get_course_info(course_id)
         course_materials = materials.get_course_materials(course_id)
+        course_tasks = courses.get_all_course_tasks(course_id)
         return render_template("update-course.html", course_id=course_id, name=course_info["name"], 
-                                description=course_info["description"], materials=course_materials)
+                                description=course_info["description"], materials=course_materials,
+                                course_tasks=course_tasks)
     if request.method == "POST":
         name = request.form["name"]
         description = request.form["description"]
@@ -201,4 +217,4 @@ def remove_material(material_id):
             materials.remove_material(material_id)
             return redirect("/")
         if request.form["choice"] == "no":
-            return redirect("/course/" + str(material_id))
+            return redirect("/modify-course/" + str(material_info[2]))

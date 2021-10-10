@@ -11,6 +11,16 @@
             <label for="description">Course description:</label><br>
             <textarea name="description" rows="3" cols="40" maxlength="1000">{{ description }}</textarea><br>
 
+            <h3>Tasks</h3>
+            <p>Add new task <a href="/add-task/{{ course_id }}">here</a>
+            <p>Remove task by clicking it:</p>
+            {% for task in course_tasks %}
+            <ul>
+                <li><a href="/remove-task/{{ task[0] }}">{{ task[1] }}</a>
+            </ul>
+            {% endfor %}
+
+            <h3>Materials</h3>
             <p>Remove material by clicking it:</p>
             {% for material in materials %}
             <ul>

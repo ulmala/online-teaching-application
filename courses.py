@@ -37,8 +37,8 @@ def add_student(course_id, student_id):
     return True
 
 def add_task(question, answer, correct, course_id):
-    sql = """INSERT INTO tasks (course_id, question)
-             VALUES (:course_id, :question)
+    sql = """INSERT INTO tasks (course_id, question, visible)
+             VALUES (:course_id, :question, true)
              RETURNING id"""
 
     task_id = db.session.execute(sql, {"course_id":course_id, "question":question}).fetchone()[0]
@@ -58,19 +58,38 @@ def get_random_task(course_id):
              FROM tasks T, answers A
              WHERE T.course_id=:course_id
              AND T.id=A.task_id
+             AND T.visible=true
              ORDER BY RANDOM()
              LIMIT 1"""
     task = db.session.execute(sql, {"course_id":course_id}).fetchone()
     return dict(zip(task.keys(), task))
 
 def get_task_count(course_id):
-
-    # LOITSU MITEN SAA TÄMÄN KURSSIN TIETOJEN KANSSA SAMAAN LOITSUUN!
-
     sql = """SELECT COUNT(*) FROM tasks
-             WHERE course_id=:course_id"""
+             WHERE course_id=:course_id
+             AND visible=true"""
     count = db.session.execute(sql, {"course_id":course_id}).fetchone()[0]
     return count
+
+def get_all_course_tasks(course_id):
+    sql = """SELECT id, question
+             FROM tasks
+             WHERE course_id=:course_id
+             AND visible=true"""
+    tasks = db.session.execute(sql, {"course_id":course_id}).fetchall()
+    return tasks
+
+def get_task(task_id):
+    sql = """SELECT id, question, course_id
+             FROM tasks
+             WHERE id=:task_id"""
+    task = db.session.execute(sql, {"task_id":task_id}).fetchone()
+    return task
+
+def remove_task(task_id):
+    sql = "UPDATE tasks SET visible=:visible WHERE id=:task_id"
+    db.session.execute(sql, {"visible":False, "task_id":task_id})
+    db.session.commit()
 
 def get_course_students(course_id):
     sql = """SELECT username, student_id
