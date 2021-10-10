@@ -1,6 +1,6 @@
 from db import db
 
-def upload_material(course_id, name, data):
+def upload_materials(course_id, name, data):
     sql = """INSERT INTO materials(course_id, name, data)
              VALUES (:course_id, :name, :data)"""
     db.session.execute(sql, {"course_id":course_id, "name":name, "data":data})
