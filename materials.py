@@ -27,7 +27,7 @@ def remove_material(material_id):
     db.session.commit()
 
 def get_material_info(material_id):
-    sql = """SELECT id, name
+    sql = """SELECT id, name, course_id
              FROM materials
              WHERE id=:material_id"""
     info = db.session.execute(sql, {"material_id":material_id}).fetchone()
