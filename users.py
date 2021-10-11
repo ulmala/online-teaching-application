@@ -103,14 +103,16 @@ def add_solved_task(user_id, task_id):
 
 def share_of_solved_tasks(user_id, course_id):
     sql = """SELECT COUNT(*) FROM tasks
-             WHERE course_id=:course_id"""
+             WHERE course_id=:course_id
+             AND visible=true"""
     count = db.session.execute(sql, {"course_id":course_id}).fetchone()[0]
 
     sql = """SELECT COUNT(*) FROM tasks
              JOIN results ON tasks.id = results.task_id
              WHERE course_id=:course_id
              AND user_id=:user_id
-             AND result=1"""
+             AND result=1
+             AND visible=true"""
     solved = db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchone()[0]
     if count > 0:
         return round((solved/count)*100,2)
