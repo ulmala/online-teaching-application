@@ -1,10 +1,18 @@
-<h1>All courses</h1>
-{% if courses|length %}
-    {% for course in courses %}
-    <ul>
-        <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
-    </ul>
-    {% endfor %}
-{% else %}
-    <p>No courses available</p>
-{% endif %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>All courses</title>
+    </head>
+    <body>
+        <h1>All available courses</h1>
+        {% if courses|length %}
+            {% for course in courses %}
+            <ul>
+                <li><a href="/course/{{ course.id }}">{{ course.name }}</a></li>
+            </ul>
+            {% endfor %}
+        {% else %}
+            <p>No courses available</p>
+        {% endif %}
+    </body>
+</html>

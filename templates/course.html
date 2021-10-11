@@ -1,33 +1,41 @@
-<h1>{{ name }}</h1>
-<p><i>{{ description }}</i></p>
-<p>This course has {{ task_count }} tasks</p>
-{% if session.user_role == 1 %}
-    {% if task_count > 0 %}
-        <p>You have solved {{ solved_tasks }}% of them</p>
-    {% endif %}
-    <p><a href="/solve/{{ id }}">Solve tasks!</a>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ name }}</title>
+    </head>
+    <body>
+        <h1>{{ name }}</h1>
+        <p><i>{{ description }}</i></p>
+        <p>This course has {{ task_count }} tasks</p>
 
-    <p>Course materials:</p>
-    {% for material in materials %}
-    <ul>
-        <li><a href="/download/{{ material[0] }}">{{ material[1] }}</a>
-    </ul>
-    {% endfor %}
-
-    <form action="/course/{{ id }}" method="POST">
-    <input type="submit" value="Enroll">
-    </form>
-{% elif session.user_role == 2 %}
-    <p><a href="/remove/{{ id }}">Remove this course</a>
-    <p><a href="/update-course/{{ id }}">Update this course</a>
-    {% if students %}
-        <p>Enrolled students:</p>
-        {% for student in students %}
-        <ul>
-            <li><a href="/course/{{ course_id }}/student-stats/{{ student[1] }}">{{ student[0] }}</a>
-        </ul>
-        {% endfor %}
-    {% endif %}
-{% endif %}
-
-<br><br><br><a href="/">Go back</a>
+        {% if session.user_role == 1 %}
+            {% if task_count > 0 %}
+                <p>You have solved {{ solved_tasks }}% of them</p>
+            {% endif %}
+            <p><a href="/solve/{{ id }}">Solve tasks!</a>
+    
+            <p>Course materials:</p>
+            {% for material in materials %}
+                <ul>
+                    <li><a href="/download/{{ material[0] }}">{{ material[1] }}</a>
+                </ul>
+            {% endfor %}
+    
+            <form action="/course/{{ id }}" method="POST">
+                <input type="submit" value="Enroll">
+            </form>
+        {% elif session.user_role == 2 %}
+            {% if students %}
+                <p>Enrolled students:</p>
+                {% for student in students %}
+                    <ul>
+                        <li><a href="/course/{{ course_id }}/student-stats/{{ student[1] }}">{{ student[0] }}</a>
+                    </ul>
+                {% endfor %}
+            {% endif %}
+            <p><a href="/update-course/{{ id }}">Update this course</a>
+            <p><a href="/remove/{{ id }}">Remove this course</a>
+        {% endif %}
+        <br><br><br><a href="/">Go back</a>
+    </body>
+</html>

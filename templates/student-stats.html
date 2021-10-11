@@ -1,10 +1,18 @@
-<p><b>{{ name }}</b> has solved {{ share_of_solved_tasks }}% of all course tasks.</p>
-
-{% if solved_tasks %}
-    <p>Tasks are:
-    {% for task in solved_tasks %}
-        <ul>
-            <li>{{ task[0] }}</li>
-        </ul>
-    {% endfor %}
-{% endif %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Statistics</title>
+    </head>
+    <body>
+        <h2>Statistics of student <i>{{ name }}</i></h2>
+        <p><i>{{ name }}</i> has solved {{ share_of_solved_tasks }}% of all course tasks.</p>
+        {% if solved_tasks %}
+            <p>Solved tasks are:</p>
+            {% for task in solved_tasks %}
+                <ul>
+                    <li>{{ task[0] }}</li>
+                </ul>
+            {% endfor %}
+        {% endif %}
+    </body>
+</html>

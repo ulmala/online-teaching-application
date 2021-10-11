@@ -1,11 +1,18 @@
-<h2>Add task</h2>
-<form action="/add-task/{{ course_id }}" method="POST" enctype="multipart/form-data">
-<p>Question:
-<p><input type="text" name="question" contenteditable>
-<p>Correct answer:
-<p><input type="text" name="answer" contenteditable>
-
-<p><input type="submit" value="Add">
-</form>
-
-<a href="/course/{{ course_id }}">Go back</a>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Add task</title>
+    </head>
+    <body>
+        <h2>Add task</h2>
+        <form action="/add-task/{{ course_id }}" method="POST" enctype="multipart/form-data">
+            <label for="question">Question:</label><br>
+            <input type="text" name="question" contenteditable><br>
+            <label for="answer">Correct answer:</label><br>
+            <input type="text" name="answer" contenteditable><br><br>
+            <input type="submit" value="Add">  
+        </form>
+        <br>
+        <a href="/course/{{ course_id }}">Go back</a>
+    </body>
+</html>

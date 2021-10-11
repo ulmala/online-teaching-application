@@ -1,14 +1,21 @@
-<h2>Registration</h2>
-<form action="/register" method="post">
-Username: <br><input type="text" name="username" minlength="1" maxlength="20">
-<p>
-Password: <br><input type="password" name="password">
-<p>
-Role:
-<input type="radio" name="role" value="1" checked="checked"> Student
-<input type="radio" name="role" value="2"> Teacher
-<p>
-<input type="submit" value="Submit">
-</form>
-<p>
-<a href="/">Go back</a>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create course</title>
+    </head>
+    <body>
+        <h1>Registration</h1>
+        <form axtion="/register" method="POST">
+            <label for="username">Username:</label><br>
+            <input type="text" name="username" minlength="1" maxlength="20"><br>
+            <label for="password">Password:</label><br>
+            <input type="text" name="password" minlength="1" maxlength="20"><br><br>
+            <label for="role">Role:</label><br>
+            <input type="radio" name="role" value="1" checked="checked">Student<br>
+            <input type="radio" name="role" value="2">Teacher<br><br>
+            <input type="submit" value="Register">
+        </form>
+        <br>
+    <a href="/">Go back</a>
+    </body>
+</html>
