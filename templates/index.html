@@ -1,48 +1,35 @@
-{% if session.user_id %}
-    <p>You are logged in as <b>{{ session.username }}</b></p>
-
-    {% if session.user_role == 1 %}
-        <p><i>This is student page.</i></p>
-        {% if courses|length %}
-            <p>You are enrolled to following courses:
-                {% for course in courses %}
-                    <ul>
-                        <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
-                    </ul>
-                {% endfor %}
-        {% else %}
-            <p>You are not enrolled to any courses.</p>
+{% extends "layout.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        {% if session.user_role == 1 %}
+            {% if courses|length %}
+                <p>You are enrolled to following courses:
+                    {% for course in courses %}
+                        <ul>
+                            <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
+                        </ul>
+                    {% endfor %}
+            {% else %}
+                <p>You are not enrolled to any courses.</p>
+            {% endif %}
+        {% elif session.user_role == 2 %}
+            {% if courses|length %}
+                <p>Your courses:
+                    {% for course in courses %}
+                        <ul>
+                            <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
+                        </ul>
+                    {% endfor %}
+            {% else %}
+                <p>You don't have any active courses.</p>
+            {% endif %}
+            <p>You can create new course <a href="/create-course">here</a></p>
         {% endif %}
-
-    {% elif session.user_role == 2 %}
-        <p><i>This is teacher page.</i></p>
-        {% if courses|length %}
-            <p>Your courses:
-                {% for course in courses %}
-                    <ul>
-                        <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
-                    </ul>
-                {% endfor %}
-        {% else %}
-            <p>You don't have any active courses.</p>
-        {% endif %}
-        <a href="/create-course">Create new course</a>
-    {% endif %}
-    
-    <br>
-    <br>
-    <br>
-    <a href="/all-courses">See all courses here</a>
-    <br>
-    <a href="/logout">Log out</a>
-{% else %}
-    <p>Log in:</p>
-    <form action="/login" method="POST">
-    <p>Username:<br>
-    <input type="text" name="username"></p>
-    <p>Password:<br>
-    <input type="password" name="password"></p>
-    <input type="submit" value="Log in">
-    </form>
-    Or create new user <a href="/register">here</a>
-{% endif %}
+    </body>
+</html>
+{% endblock %}

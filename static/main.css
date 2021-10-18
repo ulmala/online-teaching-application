@@ -3,3 +3,10 @@ body {
     max-width: 40em;
     font-family: 'Helvetica', 'Arial', sans-serif;
 }
+
+nav li {
+    display: inline-block;
+    padding: 0 .5em;
+}
+
+.fixed-row-bottom { position: fixed; bottom: 0;}

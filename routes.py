@@ -14,10 +14,12 @@ def index():
             return render_template("index.html", courses=users.get_teachers_courses(session["user_id"]))
         else:
             return render_template("index.html", courses=users.get_students_courses(session["user_id"]))
-    return render_template("index.html")
+    return render_template("login.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if "user_role" in session:
+        return redirect("/")
     if request.method == "GET":
         return render_template("login.html")
 

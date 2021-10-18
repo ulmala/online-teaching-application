@@ -1,8 +1,20 @@
 <!DOCTYPE html>
 <link rel="stylesheet" href="/static/main.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<div>
+    <h1>Online teaching application</h1>
+    {% if session.user_role  == 1 or session.user_role == 2 %}
+        <nav>
+            <ul>
+                <li>You are logged in as <b>{{session.username}}</b></li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/all-courses">All courses</a></li>
+                <li><a href="/logout">Log out</a></li>
+                
+            </ul>
+        </nav>
+    {% endif %}
+    <hr>
+</div>
 {% block content %}{% endblock %}
 <hr>
-<form>
-    <input type="button" value="Go back!" onclick="history.back()">
-</form>
