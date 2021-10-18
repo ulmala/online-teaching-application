@@ -6,7 +6,7 @@
         <title>{{ name }}</title>
     </head>
     <body>
-        <h1>{{ name }}</h1>
+        <h2>{{ name }}</h2>
         <p><i>{{ description }}</i></p>
         <p>This course has {{ task_count }} tasks</p>
 
@@ -38,7 +38,6 @@
             <p><a href="/update-course/{{ id }}">Update this course</a>
             <p><a href="/remove/{{ id }}">Remove this course</a>
         {% endif %}
-        <br><br><br><a href="/">Go back</a>
     </body>
 </html>
 {% endblock %}
