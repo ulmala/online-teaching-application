@@ -8,11 +8,12 @@
     <body>
         <h2>{{ question }}</h2>
         <form action="/solve/{{ course_id }}" method="POST">
-            <label for="answer">Your answer:</label><br>
-            <input type="text" name="answer"><br><br>
+            <label for="answer">Your answer:</label>
+            <input type="text" name="answer">
             <input type="submit" value="Submit">
-            <br><br><br><a href="/">Go back</a>
+            
         </form>
     </body>
 </html>
+<br><a href="/">Go back</a>
 {% endblock %}

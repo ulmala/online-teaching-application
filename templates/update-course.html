@@ -7,10 +7,10 @@
     </head>
     <body>
         <h2>Modify course <i>{{ name }}</i></h2>
-        <form action="/update-course/{{ course_id }}" method="POST" enctype="multipart/form-data">
-            <label for="name">Course name:</label><br>
+        <form action="/update-course/{{ course_id }}" method="POST">
+            <label for="name">Name:</label><br>
             <input type="text" name="name" value={{name}}><br>
-            <label for="description">Course description:</label><br>
+            <label for="description">Description:</label><br>
             <textarea name="description" rows="3" cols="40" maxlength="1000">{{ description }}</textarea><br>
 
             <h3>Tasks</h3>

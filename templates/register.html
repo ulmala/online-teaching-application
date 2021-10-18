@@ -7,14 +7,14 @@
     </head>
     <body>
         <h2>Registration</h2>
-        <form action="/register" method="POST">
-            <label for="username">Username:</label><br>
-            <input type="text" name="username" minlength="1" maxlength="20"><br>
-            <label for="password">Password:</label><br>
-            <input type="text" name="password" minlength="1" maxlength="20"><br><br>
-            <label for="role">Role:</label><br>
-            <input type="radio" name="role" value="1" checked="checked">Student<br>
-            <input type="radio" name="role" value="2">Teacher<br><br>
+        <form action="/register" method="POST" class="login-form">
+            <label for="username">Username:</label>
+            <input type="text" name="username" minlength="1" maxlength="20">
+            <label for="password">Password:</label>
+            <input type="text" name="password" minlength="1" maxlength="20">
+            <label for="role">Role:</label>
+            <input type="radio" name="role" value="1" checked="checked">Student
+            <input type="radio" name="role" value="2">Teacher
             <input type="submit" value="Register">
         </form>
         <br>

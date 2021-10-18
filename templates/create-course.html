@@ -7,14 +7,13 @@
     </head>
     <body>
         <h2>Create new course</h2>
-        <form action="/create-course" method="POST" enctype="multipart/form-data">
-            <label for="course_name">Course name:</label><br>
-            <input type="text" name="course_name"><br>
-            <label for="description">Course description:</label><br>
-            <textarea name="description" rows="3" cols="40" maxlength="1000"></textarea><br>
-            <label for="file">Add material:</label><br>
-            <input type="file" name="file" multiple accept=".txt"><br>
-            <br><br>
+        <form action="/create-course" method="POST" enctype="multipart/form-data" class="create-course-form">
+            <label for="course_name">Name:</label>
+            <input type="text" name="course_name">
+            <label for="description">Description: </label>
+            <textarea name="description" rows="3" cols="40" maxlength="1000"></textarea>
+            <label for="file">Add material:</label>
+            <input type="file" name="file" multiple accept=".txt">
             <input type="submit" value="Create">
         </form>
     </body>
