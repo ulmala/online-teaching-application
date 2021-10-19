@@ -7,13 +7,33 @@
     </head>
     <body>
         <h2>Add task</h2>
-        <form action="/add-task/{{ course_id }}" method="POST" enctype="multipart/form-data">
+        {% if task_type == 'basic' %}
+        <form action="/add-task/{{ course_id }}?type=basic" method="POST" enctype="multipart/form-data">
             <label for="question">Question:</label><br>
             <input type="text" name="question" contenteditable><br>
             <label for="answer">Correct answer:</label><br>
             <input type="text" name="answer" contenteditable><br><br>
             <input type="submit" value="Add">  
         </form>
+        {% elif task_type == 'multiple' %}
+        <form action="/add-task/{{ course_id }}?type=multiple" method="POST" enctype="multipart/form-data">
+            <label for="question">Question:</label><br>
+            <input type="text" name="question" contenteditable><br>
+
+            <label for="answer1">Choice 1:</label><br>
+            <input type="text" name="choice" contenteditable>
+            <input type="radio" name="correct" value=1><br>
+
+            <label for="answer1">Choice 2:</label><br>
+            <input type="text" name="choice" contenteditable>
+            <input type="radio" name="correct" value=3><br>
+
+            <label for="answer1">Choice 3:</label><br>
+            <input type="text" name="choice" contenteditable>
+            <input type="radio" name="correct" value=3><br>
+            <input type="submit" value="Add">  
+        </form>
+        {% endif %}
         <br>
         <a href="/course/{{ course_id }}">Go back</a>
     </body>

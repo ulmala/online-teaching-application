@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS tasks(
     id SERIAL PRIMARY KEY,
     course_id INT REFERENCES courses,
     question TEXT,
+    task_type TEXT,
     visible BOOLEAN
 );
 

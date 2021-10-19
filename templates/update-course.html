@@ -14,7 +14,8 @@
             <textarea name="description" rows="3" cols="40" maxlength="1000">{{ description }}</textarea><br>
 
             <h3>Tasks</h3>
-            <p>Add new task <a href="/add-task/{{ course_id }}">here</a>
+            <p>Add basic task <a href="/add-task/{{ course_id }}?type=basic">here</a>
+            <p>Add multiple choice task <a href="/add-task/{{ course_id }}?type=multiple">here</a>
             <p>Remove task by clicking it:</p>
             {% for task in course_tasks %}
             <ul>
