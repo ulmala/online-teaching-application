@@ -16,8 +16,9 @@ def get_course_info(course_id):
     sql = """SELECT courses.name, courses.description, COUNT(tasks.id) as task_count
              FROM courses LEFT JOIN tasks ON courses.id = tasks.course_id
              WHERE courses.id=:course_id
+             AND tasks.visible=:visible
              GROUP BY courses.id"""
-    info = db.session.execute(sql, {"course_id":course_id}).fetchone()
+    info = db.session.execute(sql, {"course_id":course_id, "visible":True}).fetchone()
     return dict(zip(info.keys(), info))
 
 def get_all_courses():
@@ -36,17 +37,25 @@ def add_student(course_id, student_id):
         return False
     return True
 
-def add_task(question, answer, correct, course_id):
-    sql = """INSERT INTO tasks (course_id, question, visible)
-             VALUES (:course_id, :question, true)
+def add_task(question, answer, correct, course_id, task_type):
+    sql = """INSERT INTO tasks (course_id, question, task_type, visible)
+             VALUES (:course_id, :question, :task_type, true)
              RETURNING id"""
 
-    task_id = db.session.execute(sql, {"course_id":course_id, "question":question}).fetchone()[0]
+    task_id = db.session.execute(sql, {"course_id":course_id, "question":question,
+                                       "task_type":task_type}).fetchone()[0]
     
-    sql = """INSERT INTO answers (task_id, answer, correct)
-             VALUES (:task_id, :answer, :correct)"""
-    db.session.execute(sql, {"task_id":task_id, "answer":answer, "correct":correct})
-    db.session.commit()
+    if task_type == "basic":
+        sql = """INSERT INTO answers (task_id, answer, correct)
+                VALUES (:task_id, :answer, :correct)"""
+        db.session.execute(sql, {"task_id":task_id, "answer":answer, "correct":correct})
+        db.session.commit()
+    else:
+        for a in answer:
+            sql = """INSERT INTO answers (task_id, answer, correct)
+                    VALUES (:task_id, :answer, :correct)"""
+            db.session.execute(sql, {"task_id":task_id, "answer":a[0], "correct":a[1]})
+            db.session.commit()
 
 def remove_course(course_id):
     sql = "UPDATE courses SET visible=:visible WHERE id=:id"
@@ -54,7 +63,7 @@ def remove_course(course_id):
     db.session.commit()
 
 def get_random_task(course_id):
-    sql = """SELECT T.id, T.question, A.answer, A.correct
+    sql = """SELECT T.id, T.question, T.task_type, A.answer, A.correct
              FROM tasks T, answers A
              WHERE T.course_id=:course_id
              AND T.id=A.task_id
@@ -62,7 +71,15 @@ def get_random_task(course_id):
              ORDER BY RANDOM()
              LIMIT 1"""
     task = db.session.execute(sql, {"course_id":course_id}).fetchone()
-    return dict(zip(task.keys(), task))
+    task = dict(zip(task.keys(), task))
+    if task["task_type"] == "multiple":
+        sql = """SELECT answer, correct FROM answers
+                WHERE task_id=:task_id"""
+        choices = db.session.execute(sql, {"task_id":task["id"]}).fetchall()
+        choices = [list(c) for c in choices]
+    else:
+        choices = None
+    return task, choices
 
 def get_task_count(course_id):
     sql = """SELECT COUNT(*) FROM tasks

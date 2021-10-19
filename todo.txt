@@ -1,0 +1,2 @@
+- monivalinta kysymysten ratkaisu puuttuu
+    - tsekkaa random taskin haku

@@ -7,12 +7,23 @@
     </head>
     <body>
         <h2>{{ question }}</h2>
-        <form action="/solve/{{ course_id }}" method="POST">
-            <label for="answer">Your answer:</label>
-            <input type="text" name="answer">
-            <input type="submit" value="Submit">
-            
-        </form>
+        {% if task_type=='basic' %}
+            <form action="/solve/{{ course_id }}" method="POST">
+                <label for="answer">Your answer:</label>
+                <input type="text" name="answer">
+                <input type="submit" value="Submit">
+            </form>
+        {% elif task_type=='multiple' %}
+            <form action="/solve/{{ course_id }}" method="POST">
+                <label for="answer">{{ choices[0][0] }}</label>
+                <input type="radio" name="answer" value=0><br>
+                <label for="answer">{{ choices[1][0] }}</label>
+                <input type="radio" name="answer" value=1><br>
+                <label for="answer">{{ choices[2][0] }}</label>
+                <input type="radio" name="answer" value=2><br>
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
     </body>
 </html>
 <br><a href="/">Go back</a>

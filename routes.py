@@ -1,6 +1,6 @@
 from operator import methodcaller
 from os import remove
-import re
+import json
 import courses
 import users
 import materials
@@ -96,7 +96,6 @@ def show_course(course_id):
             solved_tasks = users.share_of_solved_tasks(session["user_id"], course_id)
             students = courses.get_course_students(course_id)
             course_materials = materials.get_course_materials(course_id)
-            print(course_materials)
             return render_template("course.html", name=course_info["name"], description=course_info["description"],
                                     task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks,
                                     students=students, course_id=course_id, materials=course_materials)
@@ -110,14 +109,27 @@ def show_course(course_id):
 def add_task(course_id):
     users.require_role(2)
     users.is_course_teacher(session["user_id"], course_id)
+    task_type = request.args["type"]
     if request.method == "GET":
-        return render_template("add-task.html", course_id=course_id)
-
+        return render_template("add-task.html", course_id=course_id, task_type=task_type)
     if request.method == "POST":
-        question = request.form["question"]
-        answer = request.form["answer"]
-        correct = True #request.form.getlist("correct")
-        courses.add_task(question, answer, correct, course_id)
+        if task_type == "basic":
+            question = request.form["question"]
+            answer = request.form["answer"]
+            correct = True #request.form.getlist("correct")
+            courses.add_task(question, answer, correct, course_id, task_type)
+        elif task_type == "multiple":
+            question = request.form["question"]
+            choices = request.form.getlist("choice")
+            correct_choice = int(request.form["correct"])
+            answers = []
+            for i in range(3):
+                correct = False
+                if i + 1 == correct_choice:
+                    correct = True
+                answers.append((choices[i], correct))
+            courses.add_task(question, answers, correct, course_id, task_type)
+                
 
     return redirect("/course/" + str(course_id))
 
@@ -154,12 +166,22 @@ def solve(course_id):
     users.require_role(1)
     if not users.is_enrolled(session["user_id"], course_id):
         return render_template("error.html", message="You need to enroll first!")
-    task = courses.get_random_task(course_id)
     if request.method == "GET":
-        return render_template("solve.html", question=task["question"], course_id=course_id)
+        task, choices = courses.get_random_task(course_id)
+        session["task"] = dict(task)
+        if choices is not None:
+            session["choices"] = choices
+        return render_template("solve.html", question=task["question"], course_id=course_id,
+                               task_type=task["task_type"], choices=choices, task_id=task["id"])
     if request.method == "POST":
-        user_answer = request.form["answer"]
-        correct = user_answer == task["answer"]
+        task = session["task"]
+        choices = session["choices"]
+        if task["task_type"] == "basic":
+            user_answer = request.form["answer"]
+            correct = user_answer == task["answer"]
+        else:
+            user_answer = int(request.form["answer"])
+            correct = choices[user_answer][1]
         if correct:
             if not users.already_correct_answer(session["user_id"], task["id"]):
                 users.add_solved_task(session["user_id"], task["id"])
