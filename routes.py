@@ -62,7 +62,7 @@ def register():
             return render_template("error.html", message="Error when registering user")
         return redirect("/")
 
-@app.route("/all-courses")
+@app.route("/all-courses", methods=["GET"])
 def all_courses():
     if "user_id" in session:
         return render_template("all-courses.html", courses=courses.get_all_courses())
@@ -77,11 +77,17 @@ def create_course():
         if request.method == "POST":
             users.check_csrf()            
             name = request.form["course_name"]
+            if len(name) < 1 or len(name) > 20:
+                return render_template("error.html", message="Course name must be between 1 and 20 chars!")
             description = request.form["description"]
+            if len(description) < 20 or len(description) > 2000:
+                return render_template("error.html", message="Description must be between 20 and 2000 chars")
             teacher_id = session["user_id"]
             file = request.files['file']
             file_name = file.filename
             file_data = file.read()
+            if len(file_data) == 0:
+                return render_template("error.html", message="Course must have one material at the start!")
             course_id = courses.create_course(name, description, teacher_id)
             materials.upload_materials(course_id, file_name, file_data)
             return redirect("/course/" + str(course_id))
@@ -119,12 +125,22 @@ def add_task(course_id):
         users.check_csrf()
         if task_type == "basic":
             question = request.form["question"]
+            if len(question) < 10 or len(question) > 200:
+                return render_template("error.html", message="Question must be between 10 and 200 chars!")
             answer = request.form["answer"]
-            correct = True #request.form.getlist("correct")
+            if len(answer) == 0:
+                return render_template("error.html", message="Answer must be at least one character long!")
+            correct = True
             courses.add_task(question, answer, correct, course_id, task_type)
         elif task_type == "multiple":
             question = request.form["question"]
+            if len(question) < 10 or len(question) > 200:
+                return render_template("error.html", message="Question must be between 10 and 200 chars!")
             choices = request.form.getlist("choice")
+            if len(min(choices, key=len)) == 0:
+                return render_template("error.html", message="Every choice must have at least one character!")
+            if not "correct" in request.form:
+                return render_template("error.html", message="You need to mark the correct answer!")
             correct_choice = int(request.form["correct"])
             answers = []
             for i in range(3):
@@ -185,8 +201,12 @@ def solve(course_id):
         choices = session["choices"]
         if task["task_type"] == "basic":
             user_answer = request.form["answer"]
+            if len(user_answer) == 0:
+                return render_template("error.html", message="You must answer something!")
             correct = user_answer == task["answer"]
         else:
+            if not "answer" in request.form:
+                return render_template("error.html", message="You must answer something!")
             user_answer = int(request.form["answer"])
             correct = choices[user_answer][1]
         if correct:
@@ -219,10 +239,16 @@ def update_course(course_id):
         name = request.form["name"]
         description = request.form["description"]
 
+        if len(name) < 1 or len(name) > 20:
+            return render_template("error.html", message="Course name must be between 1 and 20 chars!")
+        if len(description) < 20 or len(description) > 2000:
+            return render_template("error.html", message="Description must be between 20 and 2000 chars")
+
         file = request.files['file']
         file_name = file.filename
         file_data = file.read()
-        materials.upload_materials(course_id, file_name, file_data)
+        if len(file_data) > 0:
+            materials.upload_materials(course_id, file_name, file_data)
 
         courses.update_course_info(course_id, name, description)
         return redirect("/course/" + str(course_id))
