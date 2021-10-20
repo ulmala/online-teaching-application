@@ -94,10 +94,11 @@ def show_course(course_id):
         if request.method == "GET": 
             course_info = courses.get_course_info(course_id)
             solved_tasks = users.share_of_solved_tasks(session["user_id"], course_id)
+            task_count = courses.get_task_count(course_id)
             students = courses.get_course_students(course_id)
             course_materials = materials.get_course_materials(course_id)
             return render_template("course.html", name=course_info["name"], description=course_info["description"],
-                                    task_count=course_info["task_count"],id=course_id, solved_tasks=solved_tasks,
+                                    task_count=task_count,id=course_id, solved_tasks=solved_tasks,
                                     students=students, course_id=course_id, materials=course_materials)
         if request.method == "POST":
             if not courses.add_student(course_id, session["user_id"]):

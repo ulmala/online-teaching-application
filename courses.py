@@ -13,12 +13,10 @@ def create_course(name, description, teacher_id):
     return course_id
 
 def get_course_info(course_id):
-    sql = """SELECT courses.name, courses.description, COUNT(tasks.id) as task_count
-             FROM courses LEFT JOIN tasks ON courses.id = tasks.course_id
-             WHERE courses.id=:course_id
-             AND tasks.visible=:visible
-             GROUP BY courses.id"""
-    info = db.session.execute(sql, {"course_id":course_id, "visible":True}).fetchone()
+    sql = """SELECT name, description
+             FROM courses
+             WHERE courses.id=:course_id;"""
+    info = db.session.execute(sql, {"course_id":course_id}).fetchone()
     return dict(zip(info.keys(), info))
 
 def get_all_courses():
