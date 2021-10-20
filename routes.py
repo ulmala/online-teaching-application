@@ -1,19 +1,17 @@
-from operator import methodcaller
-from os import remove
-import json
+from flask import render_template, request, redirect, session, Response
 import courses
 import users
 import materials
 from app import app
-from flask import render_template, request, redirect, session, Response
 
 @app.route("/")
 def index():
     if "user_role" in session:
         if users.is_teacher(session["user_id"]):
-            return render_template("index.html", courses=users.get_teachers_courses(session["user_id"]))
-        else:
-            return render_template("index.html", courses=users.get_students_courses(session["user_id"]))
+            return render_template("index.html",
+                                   courses=users.get_teachers_courses(session["user_id"]))
+        return render_template("index.html",
+                                courses=users.get_students_courses(session["user_id"]))
     return render_template("login.html")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -45,21 +43,18 @@ def register():
         users.check_csrf()
         username = request.form["username"]
         if len(username) < 1 or len(username) > 20:
-            return render_template("error.html", message="Username needs to contain 1-20 characters")
-
+            return render_template("error.html",
+                                   message="Username needs to contain 1-20 characters")
         password = request.form["password"]
         if password == "":
             return render_template("error.html", message="Password is empty!")
-
         role = request.form["role"]
-        if role not in ("1", "2"):
-            return render_template("error.html", message="U")
-
         if users.user_exists(username):
-            return render_template("error.html", message="Username already exists!")
-
+            return render_template("error.html",
+                                   message="Username already exists!")
         if not users.register(username, password, role):
-            return render_template("error.html", message="Error when registering user")
+            return render_template("error.html",
+                                   message="Error when registering user")
         return redirect("/")
 
 @app.route("/all-courses", methods=["GET"])
@@ -75,38 +70,42 @@ def create_course():
             return render_template("create-course.html")
 
         if request.method == "POST":
-            users.check_csrf()            
+            users.check_csrf()
             name = request.form["course_name"]
             if len(name) < 1 or len(name) > 20:
-                return render_template("error.html", message="Course name must be between 1 and 20 chars!")
+                return render_template("error.html",
+                    message="Course name must be between 1 and 20 chars!")
             description = request.form["description"]
             if len(description) < 20 or len(description) > 2000:
-                return render_template("error.html", message="Description must be between 20 and 2000 chars")
+                return render_template("error.html",
+                                       message="Description must be between 20 and 2000 chars")
             teacher_id = session["user_id"]
             file = request.files['file']
             file_name = file.filename
             file_data = file.read()
             if len(file_data) == 0:
-                return render_template("error.html", message="Course must have one material at the start!")
+                return render_template("error.html",
+                                       message="Course must have one material at the start!")
             course_id = courses.create_course(name, description, teacher_id)
             materials.upload_materials(course_id, file_name, file_data)
             return redirect("/course/" + str(course_id))
-        
     return redirect("/")
 
 @app.route("/course/<int:course_id>", methods=["GET", "POST"])
 def show_course(course_id):
     if "user_id" in session:
         courses.course_is_valid(course_id)
-        if request.method == "GET": 
+        if request.method == "GET":
             course_info = courses.get_course_info(course_id)
             solved_tasks = users.share_of_solved_tasks(session["user_id"], course_id)
             task_count = courses.get_task_count(course_id)
             students = courses.get_course_students(course_id)
             course_materials = materials.get_course_materials(course_id)
-            return render_template("course.html", name=course_info["name"], description=course_info["description"],
-                                    task_count=task_count,id=course_id, solved_tasks=solved_tasks,
-                                    students=students, course_id=course_id, materials=course_materials)
+            return render_template("course.html", name=course_info["name"],
+                                   description=course_info["description"], task_count=task_count,
+                                   id=course_id, solved_tasks=solved_tasks,
+                                   students=students, course_id=course_id,
+                                   materials=course_materials)
         if request.method == "POST":
             users.check_csrf()
             if not courses.add_student(course_id, session["user_id"]):
@@ -126,21 +125,26 @@ def add_task(course_id):
         if task_type == "basic":
             question = request.form["question"]
             if len(question) < 10 or len(question) > 200:
-                return render_template("error.html", message="Question must be between 10 and 200 chars!")
+                return render_template("error.html",
+                                       message="Question must be between 10 and 200 chars!")
             answer = request.form["answer"]
             if len(answer) == 0:
-                return render_template("error.html", message="Answer must be at least one character long!")
+                return render_template("error.html",
+                                       message="Answer must be at least one character long!")
             correct = True
             courses.add_task(question, answer, correct, course_id, task_type)
         elif task_type == "multiple":
             question = request.form["question"]
             if len(question) < 10 or len(question) > 200:
-                return render_template("error.html", message="Question must be between 10 and 200 chars!")
+                return render_template("error.html",
+                                       message="Question must be between 10 and 200 chars!")
             choices = request.form.getlist("choice")
             if len(min(choices, key=len)) == 0:
-                return render_template("error.html", message="Every choice must have at least one character!")
+                return render_template("error.html",
+                                       message="Every choice must have at least one character!")
             if not "correct" in request.form:
-                return render_template("error.html", message="You need to mark the correct answer!")
+                return render_template("error.html",
+                                       message="You need to mark the correct answer!")
             correct_choice = int(request.form["correct"])
             answers = []
             for i in range(3):
@@ -149,7 +153,6 @@ def add_task(course_id):
                     correct = True
                 answers.append((choices[i], correct))
             courses.add_task(question, answers, correct, course_id, task_type)
-                
 
     return redirect("/course/" + str(course_id))
 
@@ -171,7 +174,7 @@ def remove_task(task_id):
 def remove_course(course_id):
     users.require_role(2)
     users.is_course_teacher(session["user_id"], course_id)
-    
+
     course_info = courses.get_course_info(course_id)
     if request.method == "GET":
         return render_template("remove.html", name=course_info["name"], course_id=course_id)
@@ -221,8 +224,9 @@ def student_stats(student_id, course_id):
     name = users.get_username(student_id)
     share_of_solved_tasks = users.share_of_solved_tasks(student_id, course_id)
     solved_tasks = users.get_list_of_solved_tasks(student_id, course_id)
-    return render_template("student-stats.html", name=name, share_of_solved_tasks=share_of_solved_tasks,
-                            solved_tasks=solved_tasks)
+    return render_template("student-stats.html", name=name,
+                           share_of_solved_tasks=share_of_solved_tasks,
+                           solved_tasks=solved_tasks)
 
 @app.route("/update-course/<int:course_id>", methods=["GET", "POST"])
 def update_course(course_id):
@@ -231,7 +235,7 @@ def update_course(course_id):
         course_info = courses.get_course_info(course_id)
         course_materials = materials.get_course_materials(course_id)
         course_tasks = courses.get_all_course_tasks(course_id)
-        return render_template("update-course.html", course_id=course_id, name=course_info["name"], 
+        return render_template("update-course.html", course_id=course_id, name=course_info["name"],
                                 description=course_info["description"], materials=course_materials,
                                 course_tasks=course_tasks)
     if request.method == "POST":
@@ -240,9 +244,11 @@ def update_course(course_id):
         description = request.form["description"]
 
         if len(name) < 1 or len(name) > 20:
-            return render_template("error.html", message="Course name must be between 1 and 20 chars!")
+            return render_template("error.html",
+                                   message="Course name must be between 1 and 20 chars!")
         if len(description) < 20 or len(description) > 2000:
-            return render_template("error.html", message="Description must be between 20 and 2000 chars")
+            return render_template("error.html",
+                                   message="Description must be between 20 and 2000 chars")
 
         file = request.files['file']
         file_name = file.filename

@@ -1,7 +1,7 @@
 import secrets
-from db import db
 from flask import session, abort, request
 from werkzeug.security import check_password_hash, generate_password_hash
+from db import db
 
 def login(username, password):
     sql = "SELECT password, id, role FROM users WHERE username=:username"
@@ -84,7 +84,7 @@ def is_enrolled(user_id, course_id):
     if course_id in course_ids:
         return True
     return False
-    
+
 def already_correct_answer(user_id, task_id):
     sql = """SELECT 1 FROM results
              WHERE user_id = :user_id

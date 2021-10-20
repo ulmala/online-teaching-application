@@ -1,10 +1,10 @@
+from flask import abort
 from db import db
-from flask import session, abort
 
 def create_course(name, description, teacher_id):
     try:
         sql = """INSERT INTO courses (name, description, teacher_id, visible)
-                 VALUES (:name, :description, :teacher_id, :visible) RETURNING id"""         
+                 VALUES (:name, :description, :teacher_id, :visible) RETURNING id"""
         course_id = db.session.execute(sql, {"name":name, "description":description,
                                              "teacher_id":teacher_id, "visible":True}).fetchone()[0]
         db.session.commit()
@@ -42,17 +42,17 @@ def add_task(question, answer, correct, course_id, task_type):
 
     task_id = db.session.execute(sql, {"course_id":course_id, "question":question,
                                        "task_type":task_type}).fetchone()[0]
-    
+
     if task_type == "basic":
         sql = """INSERT INTO answers (task_id, answer, correct)
                 VALUES (:task_id, :answer, :correct)"""
         db.session.execute(sql, {"task_id":task_id, "answer":answer, "correct":correct})
         db.session.commit()
     else:
-        for a in answer:
+        for ans in answer:
             sql = """INSERT INTO answers (task_id, answer, correct)
                     VALUES (:task_id, :answer, :correct)"""
-            db.session.execute(sql, {"task_id":task_id, "answer":a[0], "correct":a[1]})
+            db.session.execute(sql, {"task_id":task_id, "answer":ans[0], "correct":ans[1]})
             db.session.commit()
 
 def remove_course(course_id):
