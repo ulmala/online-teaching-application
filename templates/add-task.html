@@ -14,6 +14,7 @@
             <label for="answer">Correct answer:</label><br>
             <input type="text" name="answer" contenteditable><br><br>
             <input type="submit" value="Add">  
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
         {% elif task_type == 'multiple' %}
         <form action="/add-task/{{ course_id }}?type=multiple" method="POST" enctype="multipart/form-data">
@@ -31,7 +32,8 @@
             <label for="answer1">Choice 3:</label><br>
             <input type="text" name="choice" contenteditable>
             <input type="radio" name="correct" value=3><br>
-            <input type="submit" value="Add">  
+            <input type="submit" value="Add">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
         </form>
         {% endif %}
         <br>

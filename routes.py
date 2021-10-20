@@ -42,7 +42,7 @@ def register():
         return render_template("register.html")
 
     if request.method == "POST":
-
+        users.check_csrf()
         username = request.form["username"]
         if len(username) < 1 or len(username) > 20:
             return render_template("error.html", message="Username needs to contain 1-20 characters")
@@ -74,7 +74,8 @@ def create_course():
         if request.method == "GET":
             return render_template("create-course.html")
 
-        if request.method == "POST":            
+        if request.method == "POST":
+            users.check_csrf()            
             name = request.form["course_name"]
             description = request.form["description"]
             teacher_id = session["user_id"]
@@ -101,6 +102,7 @@ def show_course(course_id):
                                     task_count=task_count,id=course_id, solved_tasks=solved_tasks,
                                     students=students, course_id=course_id, materials=course_materials)
         if request.method == "POST":
+            users.check_csrf()
             if not courses.add_student(course_id, session["user_id"]):
                 return render_template("error.html", message="You are already enrolled!")
 
@@ -114,6 +116,7 @@ def add_task(course_id):
     if request.method == "GET":
         return render_template("add-task.html", course_id=course_id, task_type=task_type)
     if request.method == "POST":
+        users.check_csrf()
         if task_type == "basic":
             question = request.form["question"]
             answer = request.form["answer"]
@@ -141,6 +144,7 @@ def remove_task(task_id):
     if request.method == "GET":
         return render_template("remove-task.html", task_info=task_info)
     if request.method == "POST":
+        users.check_csrf()
         if request.form["choice"] == "yes":
             courses.remove_task(task_id)
             return redirect("/")
@@ -156,6 +160,7 @@ def remove_course(course_id):
     if request.method == "GET":
         return render_template("remove.html", name=course_info["name"], course_id=course_id)
     if request.method == "POST":
+        users.check_csrf()
         if request.form["choice"] == "yes":
             courses.remove_course(course_id)
             return redirect("/")
@@ -175,6 +180,7 @@ def solve(course_id):
         return render_template("solve.html", question=task["question"], course_id=course_id,
                                task_type=task["task_type"], choices=choices, task_id=task["id"])
     if request.method == "POST":
+        users.check_csrf()
         task = session["task"]
         choices = session["choices"]
         if task["task_type"] == "basic":
@@ -209,6 +215,7 @@ def update_course(course_id):
                                 description=course_info["description"], materials=course_materials,
                                 course_tasks=course_tasks)
     if request.method == "POST":
+        users.check_csrf()
         name = request.form["name"]
         description = request.form["description"]
 
@@ -238,6 +245,7 @@ def remove_material(material_id):
     if request.method == "GET":
         return render_template("remove-material.html", material_info=material_info)
     if request.method == "POST":
+        users.check_csrf()
         if request.form["choice"] == "yes":
             materials.remove_material(material_id)
             return redirect("/")

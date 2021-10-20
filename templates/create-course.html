@@ -15,6 +15,7 @@
             <label for="file">Add material:</label>
             <input type="file" name="file" multiple accept=".txt">
             <input type="submit" value="Create">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
     </body>
 </html>

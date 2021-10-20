@@ -11,6 +11,7 @@
             <input type="radio" name="choice" value="yes">Yes<br>
             <input type="radio" name="choice" value="no">No<br><br>
             <input type="submit" value="Confirm">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
     </body>
 </html>

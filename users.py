@@ -1,6 +1,6 @@
 import secrets
 from db import db
-from flask import session, abort
+from flask import session, abort, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
 def login(username, password):
@@ -133,3 +133,7 @@ def get_list_of_solved_tasks(user_id, course_id):
              and result=1"""
     solved = db.session.execute(sql, {"user_id":user_id, "course_id":course_id}).fetchall()
     return solved
+
+def check_csrf():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)

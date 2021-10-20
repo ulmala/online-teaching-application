@@ -12,6 +12,7 @@
                 <label for="answer">Your answer:</label>
                 <input type="text" name="answer">
                 <input type="submit" value="Submit">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
         {% elif task_type=='multiple' %}
             <form action="/solve/{{ course_id }}" method="POST">
@@ -22,6 +23,7 @@
                 <label for="answer">{{ choices[2][0] }}</label>
                 <input type="radio" name="answer" value=2><br>
                 <input type="submit" value="Submit">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
         {% endif %}
     </body>

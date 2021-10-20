@@ -13,6 +13,7 @@
             <label for="password">Password:</label>
             <input type="password" name="password">
             <input type="submit" value="Log in">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
         <p>Or create new user <a href="/register">here</a></p>
     </body>

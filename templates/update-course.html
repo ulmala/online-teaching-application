@@ -35,6 +35,7 @@
             <input type="file" name="file" multiple accept=".txt"><br><br>
         
             <input type="submit" value="Update">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
     </body>
 </html>

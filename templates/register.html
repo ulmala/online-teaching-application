@@ -16,6 +16,7 @@
             <input type="radio" name="role" value="1" checked="checked">Student
             <input type="radio" name="role" value="2">Teacher
             <input type="submit" value="Register">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
         <br>
     <a href="/">Go back</a>

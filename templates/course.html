@@ -25,6 +25,7 @@
     
             <form action="/course/{{ id }}" method="POST">
                 <input type="submit" value="Enroll">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
         {% elif session.user_role == 2 %}
             {% if students %}
