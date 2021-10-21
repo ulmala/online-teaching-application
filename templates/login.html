@@ -5,17 +5,35 @@
     <head>
         <title>Login</title>
     </head>
-    <body>
-        <h2>Log in</h2>
-        <form action="/login" method="POST" class="login-form">
-            <label for="username">Username:</label>
-            <input type="text" name="username">
-            <label for="password">Password:</label>
-            <input type="password" name="password">
-            <input type="submit" value="Log in">
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        </form>
-        <p>Or create new user <a href="/register">here</a></p>
-    </body>
+    <div class="container d-flex justify-content-center">
+        <div class="row">
+            <div class="col-12 ">
+                
+                <p>
+                    Welcome to the online teaching application!<br>
+                    Please login if you are an existing user or create a new user <a href="/register">here</a>.
+                </p>
+                <div class="col-12">
+                    <h4>
+                        Log in
+                    </h4>
+                </div>
+                <form action="/login" method="POST">
+                    <div class="form-group col-6">
+                        <label for="username">Username:</label>
+                        <input type="text" class="form-control" name="username">
+                    </div>
+                    <div class="form-group col-6 ">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" name="password">
+                    </div>
+                    <div class="form-group col-6">
+                        <input type="submit" class="btn btn-primary" value="Log in">
+                    </div>
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                </form>
+            </div>
+        </div>
+    </div>
 </html>
 {% endblock %}
