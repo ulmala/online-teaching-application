@@ -8,9 +8,7 @@
     <div class="container d-flex justify-content-center">
         <div class="row">
             <div class="col">
-                <h3>
-                    Update course <i>{{ name }}</i>
-                </h3>
+                <h3>Update course <i>{{ name }}</i></h3>
                 <form action="/update-course/{{ course_id }}" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -23,35 +21,25 @@
                         <small class="form-text text-muted">Description must be between 20 and 2000 characters</small>
                     </div>
                     <hr>
-                    <h5>
-                        Tasks
-                    </h5>
+                    <h5>Tasks</h5>
                     <p>
                         Add new <a href="/add-task/{{ course_id }}?type=basic">basic</a> or 
                         <a href="/add-task/{{ course_id }}?type=multiple">multiple</a> type task.
                     </p>
-                    <p>
-                        Remove existing task by clicking it:
-                    </p>
+                    <p>Remove existing task by clicking it:</p>
                     {% for task in course_tasks %}
                     <ul>
                         <li><a href="/remove-task/{{ task[0] }}">{{ task[1] }}</a>
                     </ul>
                     {% endfor %}    
-
                     <hr>
-                    <h5>
-                        Materials
-                    </h5>
+                    <h5>Materials</h5>
                     <div class="form-group">
                         <label for="file">Add new material</label>
                         <input type="file" class="form-control-file" name="file" multiple accept=".txt">
                         <small class="form-text text-muted">Only .txt files, max size 10kB</small>
                     </div>
-
-                    <p>
-                        Remove existing material by clicking it:
-                    </p>
+                    <p>Remove existing material by clicking it:</p>
                     {% for material in materials %}
                     <ul>
                         <li><a href="/remove-material/{{ material[0] }}">{{ material[1] }}</a>
