@@ -5,17 +5,21 @@
     <head>
         <title>All courses</title>
     </head>
-    <body>
-        <h2>All available courses</h2>
-        {% if courses|length %}
-            {% for course in courses %}
-            <ul>
-                <li><a href="/course/{{ course.id }}">{{ course.name }}</a></li>
-            </ul>
-            {% endfor %}
-        {% else %}
-            <p>No courses available</p>
-        {% endif %}
-    </body>
+    <div class="container d-flex justify-content-center">
+        <div class="row">
+            <div class="col">
+                <h2>All available courses</h2>
+                {% if courses|length %}
+                    {% for course in courses %}
+                    <ul>
+                        <li><a href="/course/{{ course.id }}">{{ course.name }}</a></li>
+                    </ul>
+                    {% endfor %}
+                {% else %}
+                    <p>No courses available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </html>
 {% endblock %}

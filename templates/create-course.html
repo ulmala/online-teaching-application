@@ -5,18 +5,35 @@
     <head>
         <title>Create course</title>
     </head>
-    <body>
-        <h2>Create new course</h2>
-        <form action="/create-course" method="POST" enctype="multipart/form-data">
-            <label for="course_name">Name:</label>
-            <input type="text" name="course_name">
-            <label for="description">Description: </label>
-            <textarea name="description" rows="3" cols="40" maxlength="1000"></textarea>
-            <label for="file">Add material:</label>
-            <input type="file" name="file" multiple accept=".txt">
-            <input type="submit" value="Create">
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        </form>
-    </body>
+    <div class="container d-flex justify-content-center">
+        <div class="row">
+            <div class="col">
+                <h3>
+                    Create new course
+                </h3>
+                <form action="/create-course" method="POST"  enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="course_name">Course name</label>
+                        <input type="text" class="form-control" name="course_name">
+                        <small class="form-text text-muted">Name must be between 1 and 20 characters</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea type="text" class="form-control" name="description"></textarea>
+                        <small class="form-text text-muted">Description must be between 20 and 2000 characters</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="file">Add material:</label>
+                        <input type="file" class="form-control-file" name="file" multiple accept=".txt">
+                        <small class="form-text text-muted">Only .txt files, max size 10kB</small>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create">
+                    </div>
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                </form>
+            </div>
+        </div>
+    </div>
 </html>
 {% endblock %}

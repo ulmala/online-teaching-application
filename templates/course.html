@@ -5,40 +5,104 @@
     <head>
         <title>{{ name }}</title>
     </head>
-    <body>
-        <h2>{{ name }}</h2>
-        <p><i>{{ description }}</i></p>
-        <p>This course has {{ task_count }} tasks</p>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-6">
+                <h3>
+                    {{ name }}
+                </h3>
+            </div> 
+            <div class="w-100"></div>
+        </div>
 
+        <div class="row justify-content-md-center">
+            <div class="col-6">
+                {{ description }}
+            </div>
+        </div>
         {% if session.user_role == 1 %}
-            {% if task_count > 0 %}
-                <p>You have solved {{ solved_tasks }}% of them</p>
-            {% endif %}
-            <p><a href="/solve/{{ id }}">Solve tasks!</a>
-    
-            <p>Course materials:</p>
-            {% for material in materials %}
+        <div class="row justify-content-md-center mt-3">
+            <div class="col-6">
+                <hr>
+                <h5>
+                    Tasks
+                </h5>
+                <p>
+                    This course has {{ task_count }} tasks
+                </p>
+                {% if task_count > 0 %}
+                    <p>
+                        You have solved {{ solved_tasks }}% of them
+                    </p>
+                    <p>
+                        <a href="/solve/{{ id }}">Solve tasks!</a>
+                    </p>
+                {% endif %}
+                <hr>
+                <h5>
+                    Course materials
+                </h5>
+                {% for material in materials %}
                 <ul>
                     <li><a href="/download/{{ material[0] }}">{{ material[1] }}</a>
                 </ul>
-            {% endfor %}
-    
-            <form action="/course/{{ id }}" method="POST">
-                <input type="submit" value="Enroll">
-                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-            </form>
-        {% elif session.user_role == 2 %}
-            {% if students %}
-                <p>Enrolled students:</p>
-                {% for student in students %}
-                    <ul>
-                        <li><a href="/course/{{ course_id }}/student-stats/{{ student[1] }}">{{ student[0] }}</a>
-                    </ul>
                 {% endfor %}
-            {% endif %}
-            <p><a href="/update-course/{{ id }}">Update this course</a>
-            <p><a href="/remove/{{ id }}">Remove this course</a>
+                <hr>
+                <h5>
+                    Enroll to this course!
+                </h5>
+                <form action="/course/{{ id }}" method="POST">
+                    <input type="submit" value="Enroll">
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                </form>
+            </div>
+        </div>
+
+        
+        {% elif session.user_role == 2 %}
+        <div class="row justify-content-md-center mt-3">
+            <div class="col-6">
+                <h5>
+                    Enrolled students
+                </h5>
+                <small class="text-muted">
+                    Click the student to view statistics
+                </small>
+                {% if students %}
+                    {% for student in students %}
+                        <ul>
+                            <li><a href="/course/{{ course_id }}/student-stats/{{ student[1] }}">{{ student[0] }}</a>
+                        </ul>
+                    {% endfor %}
+                {% else %}
+                    <p>No students enrolled yet :(</p>
+                {% endif %}
+                <h5>
+                    Tasks
+                </h5>
+                <p>
+                    This course has {{ task_count }} tasks
+                </p>
+                <p>
+                    Add new <a href="/add-task/{{ course_id }}?type=basic">basic</a> or 
+                    <a href="/add-task/{{ course_id }}?type=multiple">multiple</a> type task!
+                </p>
+                <div class="row justify-content-md-center mt-3">
+                    <h5>
+                        Remove course or update its information.
+                    </h5>
+                </div>
+                <div class="row justify-content-md-center">
+                    <form action="/remove/{{ id }}" class="p-2">
+                        <input type="submit" value="Remove">
+                    </form>
+                    <form action="/update-course/{{ id }}" class="p-2">
+                        <input type="submit" value="Update">
+                    </form>
+                </div>
+            </div>
+        </div>
         {% endif %}
-    </body>
+    </div>
 </html>
 {% endblock %}

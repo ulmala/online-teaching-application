@@ -5,31 +5,40 @@
     <head>
         <title>Home</title>
     </head>
-    <body>
-        {% if session.user_role == 1 %}
-            {% if courses|length %}
-                <p>You are enrolled to following courses:
-                    {% for course in courses %}
-                        <ul>
-                            <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
-                        </ul>
-                    {% endfor %}
-            {% else %}
-                <p>You are not enrolled to any courses.</p>
-            {% endif %}
-        {% elif session.user_role == 2 %}
-            {% if courses|length %}
-                <p>Your courses:
-                    {% for course in courses %}
-                        <ul>
-                            <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
-                        </ul>
-                    {% endfor %}
-            {% else %}
-                <p>You don't have any active courses.</p>
-            {% endif %}
-            <p>You can create new course <a href="/create-course">here</a></p>
-        {% endif %}
-    </body>
+    <div class="container d-flex justify-content-center">
+        <div class="row">
+            <div class="col">
+                {% if session.user_role == 1 %}
+                    {% if courses|length %}
+                        <h5>Your courses:</h5>
+                        {% for course in courses %}
+                            <ul>
+                                <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
+                            </ul>
+                        {% endfor %}
+                    {% else %}
+                    <p>
+                        You are not enrolled to any courses.<br>
+                        Click "All courses" in the navigation bar to find interesting courses!
+                    </p>
+                    {% endif %}
+                {% elif session.user_role == 2 %}
+                    {% if courses|length %}
+                        <h5>Your courses:</h5>
+                            {% for course in courses %}
+                                <ul>
+                                    <li><a href="/course/{{ course.id }}">{{ course.name }} </a>
+                                </ul>
+                            {% endfor %}
+                    {% else %}
+                        <p>
+                            You don't have any active courses :(<br>
+                            Click "Create course" in the navigation bar to create one!
+                        </p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </html>
 {% endblock %}
