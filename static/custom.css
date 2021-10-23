@@ -2,6 +2,28 @@
     background: #f99;
 }
 
-.a {
-    color: pink;
+body { 
+    background: rgb(36, 233, 102) !important; 
+}
+
+.container-2 {
+    background: rgb(245, 244, 241)  !important;
+}
+
+.nav-link {
+    color: rgb(165, 3, 124) !important;
+    background: rgb(196, 224, 247);
+    border-radius: .5em;
+    padding: .5em .5em;
+    margin: .2em;
+}
+
+.text-muted {
+    color: rgb(241, 86, 119) !important;
+}
+
+.error {
+    color: rgb(255, 255, 255) !important;
+    background: rgb(241, 113, 203);
+    border-radius: .5em;
 }
