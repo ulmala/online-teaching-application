@@ -4,23 +4,23 @@ This application can be used to arrange online courses. Courses contains learnin
 
 Application features:
 -  User can:
-    - [x] log in
-    - [x] log out
-    - [x] create new account
+    - log in
+    - log out
+    - create new account
 - Student can:
-    - [x] view all courses
-    - [x] join course
-    - [x] solve tasks
-    - [x] read course material
-    - [ ] view statistics of which tasks he has solved
+    - view all courses
+    - join course
+    - solve tasks
+    - read course material
+    - view statistics of which tasks he has solved
 - Teacher can:
-    - [x] create new course
-    - [x] modify existing course
-    - [x] remove course
-    - [x] add learning material for course
-    - [x] add open tasks for course
-    - [ ] add multiple choice tasks for course
-    - [x] view enrolled students
-    - [x] view statistics which tasks they had solved
+    - create new course
+    - modify existing course
+    - remove course
+    - add learning material for course
+    - add open tasks for course
+    - add multiple choice tasks for course
+    - view enrolled students
+    - view statistics which tasks they had solved
 
-Application can be tested [here](https://onlinte-teaching-application.herokuapp.com/)  
+Application can be tested [here](https://online-teaching-application.herokuapp.com/)  
