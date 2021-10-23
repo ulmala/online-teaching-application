@@ -5,39 +5,54 @@
     <head>
         <title>Add task</title>
     </head>
-    <body>
-        <h2>Add task</h2>
-        {% if task_type == 'basic' %}
-        <form action="/add-task/{{ course_id }}?type=basic" method="POST" enctype="multipart/form-data">
-            <label for="question">Question:</label><br>
-            <input type="text" name="question" contenteditable><br>
-            <label for="answer">Correct answer:</label><br>
-            <input type="text" name="answer" contenteditable><br><br>
-            <input type="submit" value="Add">  
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        </form>
-        {% elif task_type == 'multiple' %}
-        <form action="/add-task/{{ course_id }}?type=multiple" method="POST" enctype="multipart/form-data">
-            <label for="question">Question:</label><br>
-            <input type="text" name="question" contenteditable><br>
-
-            <label for="answer1">Choice 1:</label><br>
-            <input type="text" name="choice" contenteditable>
-            <input type="radio" name="correct" value=1><br>
-
-            <label for="answer1">Choice 2:</label><br>
-            <input type="text" name="choice" contenteditable>
-            <input type="radio" name="correct" value=3><br>
-
-            <label for="answer1">Choice 3:</label><br>
-            <input type="text" name="choice" contenteditable>
-            <input type="radio" name="correct" value=3><br>
-            <input type="submit" value="Add">
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">  
-        </form>
-        {% endif %}
-        <br>
-        <a href="/course/{{ course_id }}">Go back</a>
-    </body>
+    <div class="container d-flex justify-content-center">
+        <div class="row">
+            <div class="col">
+                <h3>Add task</h3>
+                {% if task_type == 'basic' %}
+                    <form form action="/add-task/{{ course_id }}?type=basic" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="question">Question</label>
+                            <textarea type="text" class="form-control" name="question"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="answer">Correct answer</label>
+                            <input type="text" class="form-control" name="answer">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Add">  
+                        </div>
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    </form>
+                {% elif task_type == 'multiple' %}
+                    <form action="/add-task/{{ course_id }}?type=multiple" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="question">Question</label>
+                            <textarea type="text" class="form-control" name="question"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="question">Choice 1</label>
+                            <input type="text" name="choice">
+                            <input type="radio" name="correct" value=1>
+                        </div>
+                        <div class="form-group">
+                            <label for="question">Choice 2</label>
+                            <input type="text" name="choice">
+                            <input type="radio" name="correct" value=2>
+                        </div>                        
+                        <div class="form-group">
+                            <label for="question">Choice 3</label>
+                            <input type="text" name="choice">
+                            <input type="radio" name="correct" value=3>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Add">  
+                        </div>
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </html>
 {% endblock %}

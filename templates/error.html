@@ -1,1 +1,18 @@
-Error: {{ message }}
+{% extends "layout.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Remove course</title>
+    </head>
+    <div class="container d-flex justify-content-center">
+        <div class="col-4 error">
+            <h2>Error!</h2>
+            <p>{{message}}</p>
+            <div class="form-group">
+                <input type="button" value="Go back!" onclick="history.back()">
+            </div>
+        </div>
+    </div>
+</html>
+{% endblock %}

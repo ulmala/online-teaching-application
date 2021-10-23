@@ -5,14 +5,22 @@
     <head>
         <title>Result</title>
     </head>
-    <body>
-        {% if  correct  == True %}
-            <p>Your answer was correct!</p>
-        {% else %}
-            <p>Your answer was wrong :(</p>
-        {% endif %}
-        <a href="/solve/{{ course_id }}">Next task</a>
-        <p><a href="/course/{{ course_id }}">Back to course site</a>
-    </body>
+    <div class="container d-flex justify-content-center">
+        <div class="col-4">
+            {% if  correct  == True %}
+                <p>Your answer was correct!</p>
+            {% else %}
+                <p>Your answer was wrong :(</p>
+            {% endif %}
+            <div class="row justify-content-md-center">
+                <form action="/course/{{ course_id }}" class="p-2">
+                    <input type="submit" value="Back">
+                </form>
+                <form action="/solve/{{ course_id }}" class="p-2">
+                    <input type="submit" value="Next task">
+                </form>
+            </div>
+        </div>
+    </div>
 </html>
 {% endblock %}

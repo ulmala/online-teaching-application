@@ -201,13 +201,13 @@ def solve(course_id):
     if request.method == "POST":
         users.check_csrf()
         task = session["task"]
-        choices = session["choices"]
         if task["task_type"] == "basic":
             user_answer = request.form["answer"]
             if len(user_answer) == 0:
                 return render_template("error.html", message="You must answer something!")
             correct = user_answer == task["answer"]
         else:
+            choices = session["choices"]
             if not "answer" in request.form:
                 return render_template("error.html", message="You must answer something!")
             user_answer = int(request.form["answer"])
@@ -282,4 +282,5 @@ def remove_material(material_id):
             materials.remove_material(material_id)
             return redirect("/")
         if request.form["choice"] == "no":
-            return redirect("/modify-course/" + str(material_info[2]))
+            print(material_info)
+            return redirect("/update-course/" + str(material_info[2]))
