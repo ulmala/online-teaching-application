@@ -92,10 +92,11 @@ def create_course():
     return redirect("/")
 
 @app.route("/course/<int:course_id>", methods=["GET", "POST"])
-def show_course(course_id):
+def course(course_id):
     if "user_id" in session:
         courses.course_is_valid(course_id)
         if request.method == "GET":
+            enrolled = users.is_enrolled(session["user_id"], course_id)
             course_info = courses.get_course_info(course_id)
             solved_tasks = users.share_of_solved_tasks(session["user_id"], course_id)
             task_count = courses.get_task_count(course_id)
@@ -105,7 +106,7 @@ def show_course(course_id):
                                    description=course_info["description"], task_count=task_count,
                                    id=course_id, solved_tasks=solved_tasks,
                                    students=students, course_id=course_id,
-                                   materials=course_materials)
+                                   materials=course_materials, enrolled=enrolled)
         if request.method == "POST":
             users.check_csrf()
             if not courses.add_student(course_id, session["user_id"]):
@@ -282,5 +283,4 @@ def remove_material(material_id):
             materials.remove_material(material_id)
             return redirect("/")
         if request.form["choice"] == "no":
-            print(material_info)
             return redirect("/update-course/" + str(material_info[2]))

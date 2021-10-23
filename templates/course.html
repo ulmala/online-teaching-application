@@ -35,11 +35,13 @@
                 </ul>
                 {% endfor %}
                 <hr>
-                <h5>Enroll to this course!</h5>
-                <form action="/course/{{ id }}" method="POST">
-                    <input type="submit" value="Enroll">
-                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                </form>
+                {% if enrolled == false %}
+                    <h5>Enroll to this course!</h5>
+                    <form action="/course/{{ id }}" method="POST">
+                        <input type="submit" value="Enroll">
+                        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    </form>
+                {% endif %}
             </div>
         </div>
         {% elif session.user_role == 2 %}
