@@ -40,7 +40,6 @@ def register():
         return render_template("register.html")
 
     if request.method == "POST":
-        users.check_csrf()
         username = request.form["username"]
         if len(username) < 1 or len(username) > 20:
             return render_template("error.html",
